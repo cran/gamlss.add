@@ -1,0 +1,2 @@
+# functions
+export(ga,gamlss.ga, nn, nn.control, gamlss.nn, fk, gamlss.fk)
