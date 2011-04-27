@@ -66,7 +66,7 @@ ga2 <- gam(R~s(Fl)+s(A), data=rent)
 gn0 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
 gn1 <- gamlss(R~ga(~s(Fl)+s(A)), data=rent) # additive
 gn2 <- gamlss(R~ga(~s(Fl))+ga(~s(A)), data=rent)
-# somehow fitting 
+# similar fitting 
 AIC(ga2,gn0,gn1, gn2,  k=0)
 #---------------------------------------------------------
 # gamma errors one x-var
