@@ -87,8 +87,6 @@ nd<-data.frame(x=-1:12)
 pg1<-predict(g1,  newdata=nd)
 lines(fitted(g1)~x, col="purple", lwd="3")
 points(pg1~I(-1:12), col="darkgreen", pch = 21, bg="green" )
-# note the predicting values outside the x-range
-# it predicts the global linear fit
 #-------------------------------------------------
 #-------------------------------------------------
 # now negative binomial data 
@@ -105,6 +103,10 @@ prof.term(n1, min=1, max=9, step=.1, criterion="GD")
 g1 <- gamlss(y~fk(x, degree=1, start=c(4)), data=da, family=NBI)
 # get the breakpoint
 knots(g1$mu.coefSmo[[1]])
+# summary of the gamlss object FreeBreakPointsReg object
+summary(g1)
+# summary of the fitted 
+summary(g1$mu.coefSmo[[1]])
 lines(fitted(g1)~x, data=da)
 #------------------------------------------------
 # the aids data

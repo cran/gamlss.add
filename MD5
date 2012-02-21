@@ -1,0 +1,12 @@
+9b4477ded9ff0af9e85023870775a864 *DESCRIPTION
+f371149b11d48dba740f63170c561947 *LICENSE
+011c328441f2a2ed9d816d817f6766b7 *NAMESPACE
+60f6c4f47ecd385b920c115921124109 *R/fk-new-gamlss.R
+b1172db9bf3885d0828ca4e011f9a252 *R/gam_gamlss.R
+8f52a5209498c44cfbaf3e059007325c *R/nnet_gamlss.R
+cee30ae7761c77e18a7cb7be56c93d9a *man/fk.Rd
+0a7cf1979ebdb3ca5f7dc5b8d941cdd6 *man/ga.Rd
+ce8af1670eed8d542da05b72194aca16 *man/gamlss.fk.Rd
+e957b695a2afa569b89cce1376a9ba64 *man/gamlss.ga.Rd
+504fa39bd0c89101c2eedcb8eb4804db *man/gamlss.nn.Rd
+14f24c47f7c9c22c861c536d336dce14 *man/nn.Rd

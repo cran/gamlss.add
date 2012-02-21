@@ -55,7 +55,7 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
         assign(startLambdaName, fit$breakPoints, envir=gamlss.env)
   if (is.null(xeval))
    {
-   list(fitted.values=fitted(fit), residuals=resid(fit),  nl.df = fit$df-2, lambda=fit$knots[1], ## we nead df's here 
+   list(fitted.values=fitted(fit), residuals=resid(fit),  nl.df = fit$df-2, lambda=knots(fit), ## we nead df's here 
      coefSmo = fit, var=NA)
    }    
 else 
