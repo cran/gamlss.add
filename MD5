@@ -1,4 +1,4 @@
-db9c96d30e7c1a45bbeb77e001fdeff7 *DESCRIPTION
+4e46113ea5af596e732aaf6128d2e2ce *DESCRIPTION
 f371149b11d48dba740f63170c561947 *LICENSE
 0325c6315c34c484240f85067491de9b *NAMESPACE
 3054cda34a9c2e79eb7713ffc11dbc7a *R/blag-3-1-12.R
@@ -11,7 +11,7 @@ f86fb359c9a09eae33c20a70231a79ea *R/penLags-3-1-12.R
 b2a186cbd3b6eb404125bf9720d86a71 *man/blag.Rd
 55aa7f94670e1ef3381f2f230ef037f3 *man/fitFixBP.Rd
 28bd73ee0d36110d15789d5689d49e4f *man/fk.Rd
-1da422ac9d304afda3b6e53bcb835730 *man/ga.Rd
+e7157297f44737c2afd417798f2a1ba6 *man/ga.Rd
 ce8af1670eed8d542da05b72194aca16 *man/gamlss.fk.Rd
 e957b695a2afa569b89cce1376a9ba64 *man/gamlss.ga.Rd
 a35649ee1bb2ac1889d35fc83a8809eb *man/gamlss.nn.Rd

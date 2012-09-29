@@ -103,14 +103,19 @@ gb2 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
 AIC(ga2,gn2, gb2, k=0)
 AIC(ga2,gn2, gb2)
 #---------------------------------------------------------
-## gamma errors one x-var
-ga3 <- gam(R~s(Fl), method="REML", data=rent, family=Gamma(log))
-gn3 <- gamlss(R~ga(~s(Fl), method="REML"), data=rent, family=GA)
-gb3 <- gamlss(R~pb(Fl), data=rent, family=GA)
-AIC(ga3,gn3, gb3, k=0)
-AIC(ga3,gn3, gb3)
-#---------------------------------------------------------
 \dontrun{
+## normal error additive in Fl and A
+ga2 <- gam(R~s(Fl)+s(A), method="REML", data=rent)
+gn2 <- gamlss(R~ga(~s(Fl)+s(A), method="REML"),  data=rent) # additive
+gb2 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
+AIC(ga2,gn2, gb2, k=0)
+AIC(ga2,gn2, gb2)## normal error additive in Fl and A
+ga2 <- gam(R~s(Fl)+s(A), method="REML", data=rent)
+gn2 <- gamlss(R~ga(~s(Fl)+s(A), method="REML"),  data=rent) # additive
+gb2 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
+AIC(ga2,gn2, gb2, k=0)
+AIC(ga2,gn2, gb2)
+#---------------------------------------------------------
 ## gamma error two variables s() f unction
 ga4 <-gam(R~s(Fl,A), method="REML", data=rent, family=Gamma(log))
 gn4 <- gamlss(R~ga(~s(Fl,A), method="REML"), data=rent, family=GA) 
