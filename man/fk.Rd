@@ -1,6 +1,7 @@
 \name{fk}
 \Rdversion{1.1}
 \alias{fk}
+\alias{fk.control}
 
 \title{A  function to fit break points within GAMLSS}
 
@@ -13,22 +14,26 @@ use the free knots function \code{fitFreeKnots()} within \code{gamlss}.
 The great advantage of course comes from the fact GAMLSS models provide a variety of distributions and diagnostics.
 }
 \usage{
-fk(x, degree = 3, start = NULL, ...)
+fk(x, start=NULL, control=fk.control(...), ...) 
+fk.control(degree = 1, all.fixed = FALSE, fixed = NULL, base = c("trun", "Bbase"))
 }
 
 
 \arguments{
   \item{x}{the x-variable}
-  \item{degree}{the degree of the spline function fitted}
-  \item{start}{starting values for the breakpoints. If are set the number of break points is also determined
-                by the length of \code{start}}
+  \item{start}{starting values for the breakpoints. If are set the number of break points is also determined by the length of \code{start}}
+ \item{control}{the degree of the spline function fitted}
  \item{\dots}{for extra arguments}
+ \item{degree}{the degree of the based function}
+  \item{all.fixed}{whether to fix all parameter}
+  \item{fixed}{the fixed break points}
+  \item{base}{Which base should be used}
 }
 \details{
 Note that \code{fk} itself does no smoothing; it simply sets things up for the function \code{gamlss()} 
 which in turn uses the function  \code{additive.fit()} for backfitting which in turn uses \code{gamlss.fk()}.
 Note that, finding the break points is not a trivial problem and therefor  multiple maximum points can occur.  
-More details about the free knot splines can be found in  Dierckx, (1991).
+More details about the free knot splines can be found in package Dierckx, (1991).
 
 The \code{gamlss} algorithm used a modified backfitting in this case, that is, it fits the linear part fist.  
 Note that trying to predict outside the x-range can be dangerous as the example below shows.  
@@ -58,7 +63,6 @@ Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.
 
 
 \examples{
-library(gamlss.util)
 # creating  a linear + linear function
     x <- seq(0,10, length.out=201)
  knot <- 5
@@ -85,6 +89,7 @@ da <- data.frame(y,x)
 g1 <- gamlss(y~fk(x, degree=1, start=c(4)), data=da)
 nd<-data.frame(x=-1:12)
 pg1<-predict(g1,  newdata=nd)
+plot(y~x, xlim=c(-1,13), ylim=c(3,17))
 lines(fitted(g1)~x, col="purple", lwd="3")
 points(pg1~I(-1:12), col="darkgreen", pch = 21, bg="green" )
 #-------------------------------------------------
@@ -98,7 +103,7 @@ eta1 <- ifelse(x<=knot,5+0.5*x,5+0.5*x+(x-knot))
 plot(y~x, data=da)
 # fitting the model in gamlss using profile deviance
 n1 <- quote(gamlss(y ~ x+I((x>this)*(x-this)),family=NBI,data=da))
-prof.term(n1, min=1, max=9, step=.1, criterion="GD")
+prof.term(n1, min=1, max=9, criterion="GD")
 # now fit the model using fk
 g1 <- gamlss(y~fk(x, degree=1, start=c(4)), data=da, family=NBI)
 # get the breakpoint
@@ -107,7 +112,8 @@ knots(g1$mu.coefSmo[[1]])
 summary(g1)
 # summary of the fitted 
 summary(g1$mu.coefSmo[[1]])
-lines(fitted(g1)~x, data=da)
+plot(y~x, data=da)
+lines(fitted(g1)~x, data=da, col="red")
 #------------------------------------------------
 # the aids data
 # using fk()

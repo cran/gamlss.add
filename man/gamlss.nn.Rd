@@ -6,7 +6,7 @@
 Support for Function nn() 
 }
 \description{
-This is support for the  smoother function ga() an inteface for Simon Woood's \code{gam()} function.
+This is support for the  smoother function nn() an interface for Brian Reply's \code{nnet()} function.
 It is not intended to be called directly by users. 
 }
 \usage{

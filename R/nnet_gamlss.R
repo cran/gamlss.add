@@ -45,7 +45,7 @@ else {
 ## out
                           xvar <- rep(0,  len) 
    attr(xvar,"formula")        <- formula
-   attr(xvar,"control")        <- control 
+   attr(xvar,"control")        <- control
    attr(xvar, "gamlss.env")    <- gamlss.env
    attr(xvar, "ifStartedName") <- ifStartedName
    attr(xvar, "data")          <- as.data.frame(Data)

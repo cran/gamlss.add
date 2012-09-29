@@ -1,8 +1,9 @@
 # ms Tuesday, July 7, 2009 
 # fit smoothing terms using the  curfit.free.knot() function
 # which is used in the backfitting 
+# TO DO:
 #----------------------------------------------------------------------------------------
-fk <-function(x, degree=3, start=NULL, ...) 
+fk <-function(x, start=NULL, control=fk.control(...), ...) 
 { 
 #------------------------------------------
 # function starts here
@@ -20,7 +21,7 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
 #--------
 ## get a random name to use it in the gamlss() environment
 #--------
-               sl <-sample(letters, 4)
+               sl <- sample(letters, 4)
       fourLetters <- paste(paste(paste(sl[1], sl[2], sep=""), sl[3], sep=""),sl[4], sep="")
   startLambdaName <- paste("start.Lambda",fourLetters, sep=".")
 ## put the starting values in the gamlss()environment
@@ -28,11 +29,10 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
    assign(startLambdaName, start, envir=gamlss.env)
       len <- length(x) # get the lenth of the data
 ## out
-     xvar <- x#rep(0,  len) # model.matrix(as.formula(paste(paste("~",ff, sep=""), "-1", sep="")), data=Data) #
-  # attr(xvar,"formula")     <- formula
+     xvar <- x#rep(0,  len) #
    attr(xvar, "x")             <- x
+   attr(xvar,"control")        <- control
    attr(xvar, "gamlss.env")    <- gamlss.env
-   attr(xvar, "degree")        <- degree
    attr(xvar, "NameForLambda") <- startLambdaName
    attr(xvar, "call")          <- substitute(gamlss.fk(data[[scall]], z, w, ...)) 
    attr(xvar, "class")         <- "smooth"
@@ -40,22 +40,39 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
 }
 ##---------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
+fk.control <-  function ( degree=1, all.fixed=FALSE, fixed = NULL, base=c("trun","Bbase"))
+{
+  list(knots=knots,  degree=1, all.fixed=all.fixed, fixed = NULL, base=c("trun","Bbase"))
+}                      
+#----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
 # the definition of the backfitting additive function
 gamlss.fk <-function(x, y, w, xeval = NULL, ...)
 {              
       xvar <-  if (is.null(xeval)) attr(x,"x")
              else  attr(x,"x")[seq(1,length(y))]
-         degree <- attr(x,"degree")
+        control <- as.list(attr(x, "control")) 
+         degree <- control$degree
      gamlss.env <- as.environment(attr(x, "gamlss.env"))
 startLambdaName <- as.character(attr(x, "NameForLambda"))  
          lambda <- get(startLambdaName, envir=gamlss.env) ## geting the starting knots 
-            fit <- fitFreeKnots(x=xvar, y=y, w=w, degree=degree, knots = lambda,   ...)
-       #cat("knot", knots(fit), "\n")
+     if (control$all.fixed==TRUE)
+     {
+      fit <- fitFixBP(x=xvar, y=y, w=w, degree=degree, knots = lambda, fixed=control$fixed,  base=control$base)
+     }
+     else
+     {
+       fit <- fitFreeKnots(x=xvar, y=y, w=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base) 
+     }
+                
+       cat("knot", knots(fit), "\n")
+    #  plot(y~xvar)
+    #  lines(fitted(fit)~xvar, col="red")
         assign(startLambdaName, fit$breakPoints, envir=gamlss.env)
   if (is.null(xeval))
    {
-   list(fitted.values=fitted(fit), residuals=resid(fit),  nl.df = fit$df-2, lambda=knots(fit), ## we nead df's here 
+   list(fitted.values=fitted(fit), residuals=y-fitted(fit),  nl.df = fit$df-2,# -1 if linear is not in
+      lambda=knots(fit), ## we nead df's here 
      coefSmo = fit, var=NA)
    }    
 else 

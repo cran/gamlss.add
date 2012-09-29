@@ -105,6 +105,7 @@ newrent2$fit <- predict(mg1, newdata=newrent, type="response")# gam
 print(wf1, split=c(1,1,2,1), more=TRUE)
 print(wf2, split=c(2,1,2,1))
 #----------------------------------------------------------------------------------------
+\dontrun{
 data(db)
 mdb1 <- gamlss(head~nn(~age,size=20, decay=0.001), data=db)
 plot(head~age, data=db)
@@ -114,6 +115,7 @@ points(fitted(mdb1)~db$age, col="red")
 #mdb2 <- gamlss(head~nn(~age,size=20, decay=0.001), data=db, family=BCT)
 #plot(head~age, data=db)
 #points(fitted(mdb2)~db$age, col="red")
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
