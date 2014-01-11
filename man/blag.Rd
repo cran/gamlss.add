@@ -36,7 +36,7 @@ The function \code{blag()} creates a basis for lag values of x. It assumed that 
 }
 \value{
 The function \code{blag()} returns a "mlags" object (matrix of lag values).
-The function \code{llag()} returns a lis with components:
+The function \code{llag()} returns a list with components:
  \item{matrix}{The basis of the lag matrix}
  \item{weights}{The weights vector}
 The function \code{wlag()} returns a vector of prior weights having, The vector starts with  zeros (as many as the number of lags)  and continues with ones.
@@ -46,14 +46,14 @@ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for lo
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
 }
 \author{
 Mikis Stasinopoulos <\email{d.stasinopoulos@londonmet.ac.uk}>, Bob Rigby <\email{r.rigby@londonmet.ac.uk}> 
-Vlasis Voudouris <\email{v.voudouris@londonmet.ac.uk}>, Majid  Djennad, Paul Eilers.
+Vlasios Voudouris <\email{v.voudouris@londonmet.ac.uk}>, Majid  Djennad, Paul Eilers.
 }
 
 

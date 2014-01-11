@@ -1,6 +1,5 @@
 # This is the interface to use the gam() function of Simon Wood
 # within gamlss()
-#library(mgcv)
 # fit smoothing terms using the gam function of mgcv 
 # which is used in the backfitting 
 # Author Mikis Stasinopoulos
@@ -12,17 +11,17 @@ ga <-function(formula, control=ga.control(...),...)
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call())
+    scall <- deparse(sys.call(), width.cutoff = 200L) # 14-oct-2013 DS deparse(sys.call())
 if (!is(formula, "formula")) stop("formula argument in ga() needs a formula starting with ~")
 # get where "gamlss" is in system call
-# it can be in gamlss() or predict.gamlss()  
+# it can be in gamlss() or predict.gamlss()
     rexpr <- grepl("gamlss",sys.calls()) ## 
 for (i in length(rexpr):1)
    { 
  position <- i # get the position
  if (rexpr[i]==TRUE) break
    }
-  # 
+  #
 gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
 ##---
 ## get the data

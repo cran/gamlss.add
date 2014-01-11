@@ -8,9 +8,7 @@
 \description{
 The \code{fk()} function is a additive function to be used for GAMLSS models. 
 It is an interface for the \code{fitFreeKnots()} function of package 
-\pkg{gamlss.util}. The functions \code{fitFreeKnots()} was first based on the  \code{curfit.free.knot()} function of package 
-DierckxSpline of  Sundar Dorai-Raj and Spencer Graves. The function \code{fk()} allows the user to 
-use the free knots function \code{fitFreeKnots()} within \code{gamlss}. 
+\pkg{gamlss.util}. The functions \code{fitFreeKnots()} was first based on the  \code{curfit.free.knot()} function of package DierckxSpline of  Sundar Dorai-Raj and Spencer Graves. The function \code{fk()} allows the user to use the free knots function \code{fitFreeKnots()} within \code{gamlss}. 
 The great advantage of course comes from the fact GAMLSS models provide a variety of distributions and diagnostics.
 }
 \usage{
@@ -32,7 +30,7 @@ fk.control(degree = 1, all.fixed = FALSE, fixed = NULL, base = c("trun", "Bbase"
 \details{
 Note that \code{fk} itself does no smoothing; it simply sets things up for the function \code{gamlss()} 
 which in turn uses the function  \code{additive.fit()} for backfitting which in turn uses \code{gamlss.fk()}.
-Note that, finding the break points is not a trivial problem and therefor  multiple maximum points can occur.  
+Note that, finding the break points is not a trivial problem and therefore  multiple maximum points can occur.  
 More details about the free knot splines can be found in package Dierckx, (1991).
 
 The \code{gamlss} algorithm used a modified backfitting in this case, that is, it fits the linear part fist.  
@@ -57,82 +55,62 @@ Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location s
 Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk}
 }
 
-
 \seealso{
   \code{\link{gamlss.fk}}} 
 
-
 \examples{
-# creating  a linear + linear function
-    x <- seq(0,10, length.out=201)
- knot <- 5
- set.seed(12543)
-    mu <- ifelse(x<=knot,5+0.5*x,5+0.5*x+(x-knot))
-    y <- rNO(201, mu=mu, sigma=.5)
-# plot the data
- plot(y~x, xlim=c(-1,13), ylim=c(3,17))
-# fit model using curfit
- m1 <- fitFreeKnots(x, y, knots=4, degree=1)
-# fitted values
+## creating  a linear + linear function
+x <- seq(0,10, length.out=201)
+knot <- 5
+set.seed(12543)
+mu <- ifelse(x<=knot,5+0.5*x,5+0.5*x+1.5*(x-knot))
+y <- rNO(201, mu=mu, sigma=.5)
+## plot the data
+plot(y~x, xlim=c(-1,13), ylim=c(3,23))
+## fit model using curfit
+m1 <- fitFreeKnots(y, x, knots=3, degree=1)
+knots(m1)
+## fitted values
 lines(fitted(m1)~x, col="red", lwd="3")
-# predict
+## predict
 pm1<-predict(m1, newdata=-1:12)
- points(-1:12,pm1, col="red",pch = 21, bg="blue")
+points(-1:12,pm1, col="red",pch = 21, bg="blue")
 #------------------------------------------------
-# now gamlss
+## now gamlss
 #------------------------------------------------
-# get the fk function
-# fit model
-g0 <- gamlss(y~fk(x, degree=1, start=c(4)))
-# creating data frame
-da <- data.frame(y,x)
-g1 <- gamlss(y~fk(x, degree=1, start=c(4)), data=da)
-nd<-data.frame(x=-1:12)
-pg1<-predict(g1,  newdata=nd)
-plot(y~x, xlim=c(-1,13), ylim=c(3,17))
-lines(fitted(g1)~x, col="purple", lwd="3")
-points(pg1~I(-1:12), col="darkgreen", pch = 21, bg="green" )
-#-------------------------------------------------
-#-------------------------------------------------
-# now negative binomial data 
-eta1 <- ifelse(x<=knot,5+0.5*x,5+0.5*x+(x-knot))
- set.seed(143)
- y <- rNBI(201, mu=exp(eta1/7), sigma=.1)
- da <- data.frame(y=y,x=x)
-#rm(y,x)
+## now negative binomial data 
+knot=4
+eta1 <- ifelse(x<=knot,0.8+0.08*x,.8+0.08*x+.3*(x-knot))
+plot(eta1~x)
+set.seed(143)
+y <- rNBI(201, mu=exp(eta1), sigma=.1)
+da <- data.frame(y=y,x=x)
 plot(y~x, data=da)
-# fitting the model in gamlss using profile deviance
-n1 <- quote(gamlss(y ~ x+I((x>this)*(x-this)),family=NBI,data=da))
-prof.term(n1, min=1, max=9, criterion="GD")
-# now fit the model using fk
+## getting the break point using profile deviance
+n1 <- quote(gamlss(y ~ x+I((x>this)*(x-this)), family=NBI, data=da))
+prof.term(n1, min=1, max=9, criterion="GD", start.prev=FALSE)
+## now fit the model using fk
 g1 <- gamlss(y~fk(x, degree=1, start=c(4)), data=da, family=NBI)
-# get the breakpoint
-knots(g1$mu.coefSmo[[1]])
-# summary of the gamlss object FreeBreakPointsReg object
-summary(g1)
-# summary of the fitted 
-summary(g1$mu.coefSmo[[1]])
+## get the breakpoint
+knots(getSmo(g1))
+## summary of the gamlss object FreeBreakPointsReg object
+getSmo(g1)
+## plot fitted model
 plot(y~x, data=da)
 lines(fitted(g1)~x, data=da, col="red")
 #------------------------------------------------
-# the aids data
-# using fk()
+## the aids data as example where things can go wrong
+## using fk()
 data(aids)
-a1<-gamlss(y~fk(x, degree=1, start=25)+qrt, data=aids, family=NBI)
-knots(a1$mu.coefSmo[[1]])
+a1<-gamlss(y~x+fk(x, degree=1, start=25)+qrt, data=aids, family=NBI)
+knots(getSmo(a1))
 # using profile deviance
 aids.1 <- quote(gamlss(y ~ x+I((x>this)*(x-this))+qrt,family=NBI,data=aids))
-prof.term(aids.1, min=16, max=21, step=.1, criterion="GD")
-# using non-linear estimation
-library(gamlss.nl)
-naids <- nl.obj(~p1*(x-p2)*I((x>p2)), start=c(0.2, 20), data=aids)
-mod1 <- gamlss(y~nl(naids)+x+qrt, data=aids , family=NBI) 
-mod1$mu.coefSmo 
-GAIC(mod1,a1) # almost identical
-# plotting the fit
+prof.term(aids.1, min=16, max=21, step=.1,  start.prev=FALSE)
+## The Maximum Likelihood estimator is  18.33231 not 17.37064 
+## plotting the fit
 with(aids, plot(x,y,pch=21,bg=c("red","green3","blue","yellow")[unclass(qrt)]))
 lines(fitted(a1)~aids$x)
 #-------------------------------------------------
 }
-
 \keyword{regression}

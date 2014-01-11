@@ -26,10 +26,10 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
   startLambdaName <- paste("start.Lambda",fourLetters, sep=".")
 ## put the starting values in the gamlss()environment
 #--------
-   assign(startLambdaName, start, envir=gamlss.env)
+   assign(startLambdaName, c(start,1), envir=gamlss.env)
       len <- length(x) # get the lenth of the data
 ## out
-     xvar <- x#rep(0,  len) #
+     xvar <- rep(0,  len) #
    attr(xvar, "x")             <- x
    attr(xvar,"control")        <- control
    attr(xvar, "gamlss.env")    <- gamlss.env
@@ -55,23 +55,25 @@ gamlss.fk <-function(x, y, w, xeval = NULL, ...)
          degree <- control$degree
      gamlss.env <- as.environment(attr(x, "gamlss.env"))
 startLambdaName <- as.character(attr(x, "NameForLambda"))  
-         lambda <- get(startLambdaName, envir=gamlss.env) ## geting the starting knots 
-     if (control$all.fixed==TRUE)
+         lambda <- get(startLambdaName, envir=gamlss.env)[1]
+    ifFirstIter <- get(startLambdaName, envir=gamlss.env)[2]
+      ## geting the starting knots 
+     if (control$all.fixed==TRUE||ifFirstIter)
      {
-      fit <- fitFixBP(x=xvar, y=y, w=w, degree=degree, knots = lambda, fixed=control$fixed,  base=control$base)
+      fit <- fitFixedKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed,  base=control$base)
      }
      else
      {
-       fit <- fitFreeKnots(x=xvar, y=y, w=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base) 
+       fit <- fitFreeKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base)     
      }
-                
-       cat("knot", knots(fit), "\n")
+     #     browser()      
+    #   cat("knot", knots(fit), "\n")
     #  plot(y~xvar)
     #  lines(fitted(fit)~xvar, col="red")
-        assign(startLambdaName, fit$breakPoints, envir=gamlss.env)
+        assign(startLambdaName, c(fit$breakPoints,0), envir=gamlss.env)
   if (is.null(xeval))
    {
-   list(fitted.values=fitted(fit), residuals=y-fitted(fit),  nl.df = fit$df-2,# -1 if linear is not in
+   list(fitted.values=fitted(fit), residuals=y-fitted(fit),  nl.df = fit$df-1,# -1 if linear is not in
       lambda=knots(fit), ## we nead df's here 
      coefSmo = fit, var=NA)
    }    

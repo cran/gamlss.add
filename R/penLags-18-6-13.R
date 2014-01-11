@@ -1,5 +1,19 @@
 #---------------------------------------------------------------------------------------
 # Mikis Stasinopoulos 26-11-11
+# functions 
+#  i) penLags()
+# ii) checkStationarity()
+# iii) METHODS FOR penlags
+#     1) fitted()
+#     2) coef()
+#     3) resid()
+#     4) AIC()
+#     5) deviance()
+#     6) print()
+#     7) summary()
+#     8) plot()
+#     9) predict()
+#
 # in this version the constant is inclueded in the model
 # a small constant was added for the constant after suggestion from Paul
 # there is no GCV anymore
@@ -7,25 +21,27 @@
 # this is due t the way the df's are calculated using S. Wood method which do not all
 # We need to add a delay option in case that there is delay in reaction
 # TO DO
-# i)  standard  errors for the beta's' at the moment it produces rubbish
-# ii) se for the fitted values 
+#   i)  standard  errors for the beta's' at the moment it produces rubbish
+#  ii) se for the fitted values 
 # iii)  predict   OK
 #  iv)  forecast  
-#  v) the Q function implementation 
+#   v) the Q function implementation 
 #  we have a problem that we can not pass no.x as argument in case of x not identical to y
 # the above is fixed
 #-------------------------
 # TO DO 
-# 1) blag should be able to start from a different point rathen that 0 or 1 This involves of changing blag with a new argument say from.lag OK done
+# 1) blag should be able to start from a different point rathen that 0 or 1 This involves of changing blag with a new argument say from.lag: OK done
 # the above makes the no.x redundand
 # 2) check for AR modeling in la
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # the penalised lags regression
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 penLags <- function(y, x, 
                lags = 10,
            from.lag = 0,
-            weights = rep(1,length(y)), 
+            weights = NULL, 
                data = NULL,    
                  df = NULL, 
              lambda = NULL,  
@@ -37,6 +53,7 @@ penLags <- function(y, x,
                   ...)
 {
 #----------------------------------------------------
+# local functions
 # order refers to differences in the penalty matrix
 # order = 0 : white noise
 # order = 1 : random effect
@@ -47,16 +64,7 @@ penLags <- function(y, x,
 # if both lambda=NULL  and df=NULL then lambda is estimated using local ML (PQL)
 # if df is not NULL but lambda is NULL then df are used for smoothing
 # if lambda is not NULL (whether df=NULL  or not) lambda is used for smoothing
-# ---------------------------------------------------
-# creates the matrix if the lagss plues the prior weights
-#wlag<-function(y, ...) 
-#{
-#  L <- blag(y, ...)
-#  weights <- rep(1, length(y))
-#  weights[1:attr(L,"no.lags")] <- 0	
-# list(matrix=L, weights=W)
-#}
-#-------------------------------------------------  
+# ------------------------------------------------------------------------------
 # a simple penalized regression where the first column is not penalised  
 regpen <- function(y, X, w, lambda, D)
   {
@@ -73,27 +81,28 @@ regpen <- function(y, X, w, lambda, D)
              NG <- lambda * NG      
              XW <- w * X
             XWX <- t(XW) %*% X
-           beta <- solve(XWX + NG, t(XW) %*% y)
+             P0 <- 1e-3 * diag( dim(NG)[1]) # new MIkis
+           beta <- solve(XWX + NG+P0, t(XW) %*% y)
             #fv <- X %*%beta
-             H <- solve(XWX + NG, XWX)
+              H <- solve(XWX + NG+P0, XWX)
          #  edf <- sum(diag(H))
            fit <- list(beta = beta, edf = sum(diag(H)), trace=diag(H))
   return(fit)  
   }
-#--------------------------------------------------#--------------------------------------------------
+#--------------------------------------------------#---------------------------
 ## function to find lambdas miimizing the local GAIC        
      fnGAIC <- function(lambda, k)
     {
     #cat("lambda, k", lambda, k, "\n")
-       fit <- regpen(y=y, X=X, w=weights*pw, lambda=lambda, D)
-        fv <- X %*% fit$beta
-       sig2 <- sum(weights*(y-fv)^2)/(n - fit$edf)
-       NOd <- -2*dNO(y, mu=fv, sigma=sqrt(sig2), log=TRUE)    
-      GAIC <- sum(weights*NOd)+k*fit$edf 
+         fit <- regpen(y=y, X=X, w=weights*pw, lambda=lambda, D)
+          fv <- X %*% fit$beta
+        sig2 <- sum(weights*(y-fv)^2)/(n - fit$edf)
+         NOd <- -2*dNO(y, mu=fv, sigma=sqrt(sig2), log=TRUE)    
+        GAIC <- sum(weights*NOd)+k*fit$edf 
     #cat("GAIC", GAIC, "\n")
       GAIC   
     }
-#--------------------------------------------------
+#-------------------------------------------------------------------------------
 ## function to find the lambdas wich minimise the local GCV 
 #      fnGCV <- function(lambda, k)
 #           {
@@ -103,18 +112,30 @@ regpen <- function(y, X, w, lambda, D)
 #           GCV <- (n*y_Hy2)/(n-k*edf)
 #           GCV
 #           }  
-#--------------------------------------------------
+#-------------------------------------------------------------------------------
     edf1_df <- function(lambda)
            {
            edf <-  sum(1/(1+lambda*UDU$values))
            (edf-df)
            }  
-#------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # the main function starts here
-#------------------------------------------------------------------
-           if (is.data.frame(data)) { attach(data); on.exit(detach(data))} 
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# we only need y  x and w
+if (!is.null(data)) 
+ {
+  y <- with(data, y)
+  x <- with(data, x)
+ }
+weights <- if(is.null(weights))  rep(1,length(y)) 
+          else {
+                if(!is.null(data))  with(data, weights)
+                else weights
+                }
+ #          if (is.data.frame(data)) { attach(data); on.exit(detach(data))} 
            if (lags <= order+1) stop("Increase the number of lags") 
-           require(gamlss)
           scall <- deparse(sys.call())
          method <- match.arg(method)
       Extra.Arg <- list(...)
@@ -311,14 +332,15 @@ regpen <- function(y, X, w, lambda, D)
   }
   return(pfit)
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 fitted.penlags<-function(object,...) 
 {
 object$fitted.values
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 coef.penlags<-function(object, what=c("All", "AR", "varComp"), ...) 
 {
  what <- match.arg(what) 
@@ -327,8 +349,8 @@ coef.penlags<-function(object, what=c("All", "AR", "varComp"), ...)
                   "varComp"= object$par)
   coef
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 residuals.penlags<-function(object,...) 
 {
 #object$y-object$fitted
@@ -337,8 +359,8 @@ res <- ifelse(res==-Inf, NA, res)
 res <- ifelse(res==Inf, NA, res)
 res[!is.na(res)]  
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 AIC.penlags <- function(object, ...,k=2)
 {
     if (length(list(...))) {
@@ -363,16 +385,15 @@ AIC.penlags <- function(object, ...,k=2)
         val
     }
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 deviance.penlags<-function(object,...) 
 {
 object$deviance
 }
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
-  #------------------------------------------
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
 print.penlags  <- function (x, digits = max(3, getOption("digits") - 3), ...) 
 {   
     cat("\nPenalised Lags fit")
@@ -390,7 +411,8 @@ print.penlags  <- function (x, digits = max(3, getOption("digits") - 3), ...)
         format(signif(x$sbc)), "\n")
     invisible(x)
 }
-#-----------------------------------------------------------------------------------------   
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 summary.penlags  <- function (object, digits = max(3, getOption("digits") - 3), ...) 
 {   
     cat("\nDiscrete Smoothing fit")
@@ -413,8 +435,8 @@ printCoefmat(matcoef, digits = 6, signif.stars = TRUE)
     invisible(object)
 }
 # methods are finish here    
-#---------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #plot.penlags <- function(x, ...)
 #{
 #  residx <- (x$y-fitted(x))/x$sigma
@@ -447,8 +469,8 @@ printCoefmat(matcoef, digits = 6, signif.stars = TRUE)
 #     lines(as.numeric(residx), as.numeric(residx), col="red" , lwd=.4, cex=.4 )
 #par(op)
 #}
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 plot.penlags <- function (x, xvar=NULL, parameters=NULL, ts=FALSE, summaries=TRUE, ...) 
 {
     residx <- resid(x) # get the residuals 
@@ -544,9 +566,9 @@ plot.penlags <- function (x, xvar=NULL, parameters=NULL, ts=FALSE, summaries=TRU
                }
     par(op)
 }
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 predict.penlags <- function(object, how.many=NULL,...)
 {
    if (is.null(how.many))
@@ -576,9 +598,9 @@ predict.penlags <- function(object, how.many=NULL,...)
   return(pred) 
    } 
   }
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 checkStationarity <- function(par)
 {
 minroots <- min(Mod(polyroot(c(1, - par))))
@@ -586,7 +608,7 @@ minroots <- min(Mod(polyroot(c(1, - par))))
             cat("'ar' part of model is not stationary")
         else cat("OK")
 }
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------     
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------     
 #polyroot(c(1, 2, 1, 0, 0))

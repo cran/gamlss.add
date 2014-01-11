@@ -83,6 +83,5 @@ else
 #X <- blag(y, 5, value=0)
 #head(X)
 #w<-wlag(X)
-#library(gamlss)
 #m1<-gamlss(y~X, weights=w )
 #summary(m1)

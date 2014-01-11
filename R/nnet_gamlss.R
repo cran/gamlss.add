@@ -1,4 +1,4 @@
-# library(nnet)
+
 # fit neural networks terms using the nnet function of nnet 
 # which is used in the backfitting 
 #----------------------------------------------------------------------------------------

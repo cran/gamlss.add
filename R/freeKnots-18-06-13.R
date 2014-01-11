@@ -1,5 +1,22 @@
 #----------------------------------------------------------------------------------------
 # for fixed knots it fits a piecewise beta spline
+# FUNCTIONS
+#  i) fitFixedKnots()
+# ii) Methods for FixBreakPointsReg objects
+#      1) print()
+#      2) fitted()
+#      3) redid()
+#      4) coef()
+#      5) knots()
+#      6) predict()
+#  iii) fitFreeKnots()
+#   iv) Methods for FreeBreakPointsReg
+#       1) pint()
+#       2) fitted()
+#       3) resid()
+#       4) coef()
+#       5) summary()
+#       6) vcov()
 # created by MS Tuesday, July 7, 2009 
 # revised by MS Thusday, Aug 18, 2011
 # the truncted basis is introdused  plus the Hessian so standard errors can be displaied for 
@@ -9,11 +26,21 @@
 # ii) maybe need genoud for more complicated problems
 # iii) use optimHess()
 # iv) nlminb() instead of optim?
-# v) change names to be consisten
-#----------------------------------------------------------------------------------------
-fitFixBP <- function(x,y,w = NULL, knots=NULL,  data = NULL, degree=3, fixed = NULL, base=c("trun","Bbase"), ...)
+# v) change names to be consistent
+# functions
+# i)   fitFixedKnots
+# ii)
+#--------------------------------------------------------------------------------
+fitFixedKnots <- function(y, x,  
+                   weights = NULL, 
+                     knots = NULL,  
+                      data = NULL, 
+                    degree = 3, 
+                     fixed = NULL, 
+                      base = c("trun","Bbase"), ...)
 {
 # fixed argument is not useful here (since all BP are fixed) unless is used in fitFreeKnots()
+#-------------------------------------------------------------------------------
 # local functions ---
 # A least square fit---
 # not used at the moment since lm.wfit is more stable
@@ -27,7 +54,7 @@ fitFixBP <- function(x,y,w = NULL, knots=NULL,  data = NULL, degree=3, fixed = N
 #           fit <- list(coefficients = beta, fv=fv, rss=rss, df=length(beta) ) #edf = sum(diag(H)))
 #  return(fit)
 #  }
-#--------------------------
+#-------------------------------------------------------------------------------
 # Bbase base
  get.X.beta <- function(x, knots)  
    {
@@ -49,7 +76,7 @@ fitFixBP <- function(x,y,w = NULL, knots=NULL,  data = NULL, degree=3, fixed = N
              # Xbe <<- X
     X
     } 
-#--------------------------
+#-------------------------------------------------------------------------------
 #-trunc base
  get.X.trun <- function(x, knots)  
    {
@@ -71,41 +98,51 @@ fitFixBP <- function(x,y,w = NULL, knots=NULL,  data = NULL, degree=3, fixed = N
             # Xtr <<- X
     X
     } 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # main function starts here
 # if data exit attach them
-       if (is.data.frame(data)) { attach(data); on.exit(detach(data))}
+#       if (is.data.frame(data)) { attach(data); on.exit(detach(data))}
+         ylab <- deparse(substitute(y))
+         xlab <- deparse(substitute(x))
+            y <- if (!is.null(data)) get(deparse(substitute(y)), envir=as.environment(data)) else y
+            x <- if (!is.null(data)) get(deparse(substitute(x)), envir=as.environment(data)) else x
+    w <- if(is.null(weights))  rep(1,length(y)) 
+         else {
+                 if(!is.null(data))  get(deparse(substitute(weights)), envir=as.environment(data))
+                  else weights
+               }
               lx <- length(x)
         whatbase <- match.arg(base)
                X <- if (whatbase=="Bbase") get.X.beta(x, knots) else get.X.trun(x, knots)
-               w <- if (is.null(w)) rep(1, lx)
-                   else rep(w, length = lx)
-            #fit <- ls.wr(y,X,w)
-             # or  
              fit <- lm.wfit(X,y,w) 
            sigma <- sum(resid(fit)^2)/length(y) 
     names(sigma) <-"sigma"
             out  <- list(call = sys.call(), 
-              fitted.values = fitted(fit), 
-                  residuals = resid(fit), 
-                         df = fit$rank, 
-                        rss = sum(resid(fit)^2),  
-                       coef = fit$coefficients, sigma = sigma, 
-                      fixed = fixed, 
-                breakPoints = knots,  
-                     degree = degree, 
-                       base = whatbase, 
-                          y = y, 
-                          x = x, 
-                          w = w, 
-                          X = X,  
-                         qr = fit$qr,  
-                   deviance = sum(-2*dNO(y, mu=fitted(fit), 
-                      sigma = sigma)))
-   class(out) <- c("FixBreakPointsReg")
+                fitted.values = fitted(fit), 
+                    residuals = resid(fit), 
+                           df = fit$rank, 
+                          rss = sum(resid(fit)^2),  
+                         coef = fit$coefficients, sigma = sigma, 
+                        fixed = fixed, 
+                  breakPoints = knots,  
+                       degree = degree, 
+                         base = whatbase, 
+                            y = y, 
+                            x = x, 
+                            w = w, 
+                            X = X,  
+                           qr = fit$qr,  
+                     deviance = sum(-2*dNO(y, mu=fitted(fit), 
+                        sigma = sigma)))
+      class(out) <- c("FixBreakPointsReg")
          out
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# methods
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # print 
 print.FixBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {
@@ -120,30 +157,35 @@ print.FixBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...
     cat("\n")
     invisible(x)
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # fitted 
 fitted.FixBreakPointsReg<-function(object,...) 
 {
 object$fitted.values
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 residuals.FixBreakPointsReg<-function(object,...) 
 {
 object$residuals
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 coef.FixBreakPointsReg<-function(object,...) 
 {
 object$coef
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 knots.FixBreakPointsReg<-function(Fn,...)
 {
 BP<-Fn$breakPoints
 names(BP)<-paste("BP",1:length(Fn$breakPoints), sep="")
 BP
 }
-#------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 predict.FixBreakPointsReg<-function(object, newdata=NULL, old.x.range=TRUE,...)
 {
 #-------------------------------------------------------------------------
@@ -188,7 +230,7 @@ predict.FixBreakPointsReg<-function(object, newdata=NULL, old.x.range=TRUE,...)
               X <-cbind(X1,X2)
     X
     } 
-#----------------------------------------------------------------------- 
+#----------------------------------------------------------------------- -------
 # function start here 
 if (is.null(newdata))  #
     {
@@ -237,28 +279,45 @@ warning(paste("There is a discrepancy  between the original prediction and the r
  pred
 }
 #----------------------------------------------------------------------------------------
-
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
 #****************************************************************************************
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
-fitFreeKnots <- function(x,y,w = NULL, knots=NULL, degree=3, fixed = NULL, trace = 0, data=NULL, base=c("trun","Bbase"), ...)
+fitFreeKnots <- function(y,x, 
+                         weights = NULL, 
+                           knots = NULL, 
+                          degree = 3, 
+                           fixed = NULL, 
+                           trace = 0, 
+                            data = NULL, 
+                            base = c("trun","Bbase"), ...)
 {
-#------------------------------------------------------------------
+#-------------------------------------------------------------------------------
     penalty.opt <- function(kn, x, y, w, k, fixed = NULL, degree, ...) 
         {
        
        # kn <- sort(c(kn, fixed))
         if (length(u <- unique(knots)) < length(knots)) 
             stop(sprintf("%d coincident knot(s) detected", length(kn) - length(u)))
-        #       fitFixBP(x, y, knots = knots, degree=degree, fixed = fixed)
+        #       fitFixedKnots(x, y, knots = knots, degree=degree, fixed = fixed)
         #cat("knots", kn, "\n")
-        sp <-  fitFixBP(x=x, y=y, w=w, knots = kn, degree=degree, base=base, ...)
+        sp <-  fitFixedKnots(x=x, y=y, weights=w, knots = kn, degree=degree, base=base, ...)
         sp$rss
        }
-#-------------------------------------------------------------------
-       if (is.data.frame(data)) { attach(data); on.exit(detach(data))}
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+          ylab <- deparse(substitute(y))
+          xlab <- deparse(substitute(x))
+             y <- if (!is.null(data)) get(deparse(substitute(y)), envir=as.environment(data)) else y
+             x <- if (!is.null(data)) get(deparse(substitute(x)), envir=as.environment(data)) else x
+            w <- if(is.null(weights))  rep(1,length(y)) 
+                 else 
+                   {
+                   if(!is.null(data))  get(deparse(substitute(weights)), envir=as.environment(data))
+                   else weights
+                   }
+#if (is.data.frame(data)) { attach(data); on.exit(detach(data))}
       #  lx <- length(x)
        xmin <- min(x)
        xmax <- max(x)
@@ -268,7 +327,7 @@ fitFreeKnots <- function(x,y,w = NULL, knots=NULL, degree=3, fixed = NULL, trace
      shift <- .Machine$double.eps^0.25
         # g <- length(knots)
     # initial fit
-    #   sp0 <- fitFixBP(x=x, y=y, w=w, knots = knots, degree=degree, fixed = fixed, base=base)
+    #   sp0 <- fitFixedKnots(x=x, y=y, w=w, knots = knots, degree=degree, fixed = fixed, base=base)
     #sigma0 <-sp0$rss
     lambda <- if (length(knots) > 1) 
         {
@@ -281,7 +340,7 @@ fitFreeKnots <- function(x,y,w = NULL, knots=NULL, degree=3, fixed = NULL, trace
         {
             optimize(penalty.opt, c(xmin, xmax), x = x, y = y, w=w,  degree=degree, fixed = fixed)$minimum
         }
-          fit <- fitFixBP(x = x, y = y, w = w, knots = lambda, degree = degree, fixed = fixed, base=base)
+          fit <- fitFixedKnots(x = x, y = y, weights = w, knots = lambda, degree = degree, fixed = fixed, base=base)
          out  <- list(call = sys.call(), fitted.values = fitted(fit), residuals = resid(fit), df = fit$df+length(lambda), 
                         rss = fit$rss, knots = fit$knots, coef = coef(fit), sigma = fit$sigma, 
                         fixed = fit$fixed, breakPoints = lambda,  degree = degree, base=fit$base,  y = y, x = x, X=fit$X, w = w, qr =fit$qr,  
@@ -289,7 +348,7 @@ fitFreeKnots <- function(x,y,w = NULL, knots=NULL, degree=3, fixed = NULL, trace
  class(out) <- c("FreeBreakPointsReg", "FixBreakPointsReg")
          out
  }
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # print 
 print.FreeBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {

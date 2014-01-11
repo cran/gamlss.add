@@ -85,7 +85,6 @@ Wood S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman an
 
 
 \examples{
-library(gamlss)
 library(mgcv)
 data(rent)
 #---------------------------------------------------------
@@ -104,27 +103,25 @@ AIC(ga2,gn2, gb2, k=0)
 AIC(ga2,gn2, gb2)
 #---------------------------------------------------------
 \dontrun{
-## normal error additive in Fl and A
-ga2 <- gam(R~s(Fl)+s(A), method="REML", data=rent)
-gn2 <- gamlss(R~ga(~s(Fl)+s(A), method="REML"),  data=rent) # additive
-gb2 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
-AIC(ga2,gn2, gb2, k=0)
-AIC(ga2,gn2, gb2)## normal error additive in Fl and A
-ga2 <- gam(R~s(Fl)+s(A), method="REML", data=rent)
-gn2 <- gamlss(R~ga(~s(Fl)+s(A), method="REML"),  data=rent) # additive
-gb2 <- gamlss(R~pb(Fl)+pb(A), data=rent) # additive
-AIC(ga2,gn2, gb2, k=0)
-AIC(ga2,gn2, gb2)
+## gamma error additive in Fl and A
+ga3 <- gam(R~s(Fl)+s(A), method="REML", data=rent, family=Gamma(log))
+gn3 <- gamlss(R~ga(~s(Fl)+s(A), method="REML"), data=rent, family=GA)# additive
+gb3 <- gamlss(R~pb(Fl)+pb(A), data=rent, family=GA) # additive
+AIC(ga3,gn3, gb3, k=0)
+AIC(ga3,gn3, gb3)
 #---------------------------------------------------------
-## gamma error two variables s() f unction
+## gamma error surface fitting
 ga4 <-gam(R~s(Fl,A), method="REML", data=rent, family=Gamma(log))
 gn4 <- gamlss(R~ga(~s(Fl,A), method="REML"), data=rent, family=GA) 
 AIC(ga4,gn4, k=0)
 AIC(ga4,gn4)
+## plot the fitted surfaces
 op<-par(mfrow=c(1,2))
 vis.gam(ga4)
-vis.gam(gn4$mu.coefSmo[[1]])
+vis.gam(getSmo(gn4))
 par(op)
+## contour plot using mgcv's plot() function
+plot(getSmo(gn4))
 #---------------------------------------------------------
 ## predict
 newrent <- data.frame(expand.grid(Fl=seq(30,120,5), A=seq(1890,1990,5 )))
@@ -132,8 +129,10 @@ newrent1 <-newrent2 <- newrent
 newrent1$pred <- predict(ga4, newdata=newrent, type="response")
 newrent2$pred <- predict(gn4, newdata=newrent, type="response")
 library(lattice)
-wf1<-wireframe(pred~Fl*A, newrent1, aspect=c(1,0.5), drape=TRUE, colorkey=(list(space="right", height=0.6)), main="gam()")
-wf2<-wireframe(pred~Fl*A, newrent2, aspect=c(1,0.5), drape=TRUE, colorkey=(list(space="right", height=0.6)), main="gamlss()")
+wf1<-wireframe(pred~Fl*A, newrent1, aspect=c(1,0.5), drape=TRUE, 
+             colorkey=(list(space="right", height=0.6)), main="gam()")
+wf2<-wireframe(pred~Fl*A, newrent2, aspect=c(1,0.5), drape=TRUE, 
+          colorkey=(list(space="right", height=0.6)), main="gamlss()")
 print(wf1, split=c(1,1,2,1), more=TRUE)
 print(wf2, split=c(2,1,2,1))
 #---------------------------------------------------------
@@ -144,7 +143,7 @@ AIC(ga5,gn5)
 AIC(ga5,gn5, k=0)
 op<-par(mfrow=c(1,2))
 vis.gam(ga5)
-vis.gam(gn5$mu.coefSmo[[1]])
+vis.gam(getSmo(gn5))
 par(op)
 #----------------------------------------------------------
 ## use of Markov random fields
@@ -162,7 +161,8 @@ plot(b,scheme=1)
 plot(bb$mu.coefSmo[[1]], scheme=1)
 ## Compare to reduced rank version...
 b <- gam(crime ~ s(district,bs="mrf",k=20,xt=xt),data=columb,method="REML")
-bb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt), method="REML"), data=columb)
+bb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt), method="REML"), 
+             data=columb)
 AIC(b,bb, k=0)
 plot(b,scheme=1)
 plot(bb$mu.coefSmo[[1]], scheme=1)
@@ -171,21 +171,18 @@ par(op)
 b <- gam(crime ~ s(district,bs="mrf",k=20,xt=xt)+s(income),
          data=columb,method="REML")
 ## x in gam() 
-bb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt)+s(income), method="REML"), data=columb)
+bb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt)+s(income), 
+             method="REML"), data=columb)
 ## x in gamlss()
-bbb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt), method="REML")+pb(income), data=columb)
+bbb <- gamlss(crime~ ga(~s(district,bs="mrf",k=20,xt=xt), 
+             method="REML")+pb(income), data=columb)
 AIC(b,bb,bbb)
-
-op<-par(mfrow=c(1,2))
+## ploting the fitted models
+op<-par(mfrow=c(2,2))
 plot(b,scheme=c(0,1))
+plot(getSmo(bb), scheme=c(0,1))
 par(op)
-
-op<-par(mfrow=c(1,2))
-plot(bb$mu.coefSmo[[1],scheme=c(0,1))
-par(op)
-
-plot(bbb$mu.coefSmo[[2]])
-
+plot(getSmo(bbb, which=2))
 ## plot fitted values by district
 op<- par(mfrow=c(1,2))
 fv <- fitted(b)
@@ -195,6 +192,5 @@ names(fv1) <- as.character(columb$district)
 polys.plot(columb.polys,fv)
 polys.plot(columb.polys,fv1)
 par(op)}
-
 }
 \keyword{regression}

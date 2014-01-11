@@ -5,9 +5,15 @@ export(ga, ga.control, gamlss.ga,
        penLags, 
        fk, gamlss.fk,
        blag, llag, wlag,
-       fitFixBP, fitFreeKnots)
+       fitFixedKnots, fitFreeKnots)
 
 importFrom(stats, knots, coef, fitted, predict, residuals)
+importFrom(gamlss)
+importFrom(gamlss.nl)
+importFrom(nnet)
+importFrom(lattice)
+importFrom(mgcv)
+
 
 S3method(fitted, penlags)
 S3method(coef, penlags)

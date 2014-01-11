@@ -1,20 +1,20 @@
 \name{penLags}
 \alias{penLags}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Penalised Lag Regression Functiion}
+\title{Penalised Lag Regression Function}
 \description{
 The function \code{penLags()} fits a regression model to lags of an explanatory variable \code{x} or to lags of \code{y} itself.
 The estimated coefficients of the lags are penalised using a quadratic penalty similar to P-splines.
 }
 \usage{
-penLags(y, x, lags = 10, from.lag=0, weights = rep(1, length(y)), data = NULL, df = NULL, 
+penLags(y, x, lags = 10, from.lag=0, weights = NULL, data = NULL, df = NULL, 
         lambda = NULL, start.lambda = 10, order = 1, 
         plot = FALSE, method = c("ML", "GAIC"), k = 2, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{The response variable}
-  \item{x}{The explanatory variable which can be the response itself if autoregresive model is required}
+  \item{x}{The explanatory variable which can be the response itself if autoregressive model is required}
   \item{lags}{The number of lags required}
  \item{from.lag}{from which lag value to start, the default is zero which means include the original \code{x} in the basis}
   \item{weights}{The prior weights}
@@ -24,14 +24,14 @@ penLags(y, x, lags = 10, from.lag=0, weights = rep(1, length(y)), data = NULL, d
   \item{start.lambda}{Staring values for lambda for the local ML estimation}
   \item{order}{The order of the penalties in the beta coefficients}
   \item{plot}{Whether to plot the data and the fitted values}
-  \item{method}{The method of estimating the smoothing parameter with two altenatives, i) \code{ML}: the local maximum likelihood estimation method (or PQL method) ii) \code{GAIC}: the generaised Akaike criterion method of estimating the smoothing parameter}
+  \item{method}{The method of estimating the smoothing parameter with two alternatives, i) \code{ML}: the local maximum likelihood estimation method (or PQL method) ii) \code{GAIC}: the generalised Akaike criterion method of estimating the smoothing parameter}
   \item{k}{The penalty required if the method  \code{GAIC} is used i.e.  \code{k=2} for AIC or \code{k=log(n)} if BIC (or SBC).}
   \item{\dots}{
 for further arguments
 }
 }
 \details{
-This function is designed for fitting a simple  penelised lag regression model to a response variable. The meaning of simple in this case  is that only one explanatory variable can used (whether it is a true explanatory or the resonse varible itsself) and only a normal assumption for the response is made.  For multiple explanatory variables and for different distributions withing \code{gamlss} use the additive function \code{la}.  
+This function is designed for fitting a simple  penalised lag regression model to a response variable. The meaning of simple in this case  is that only one explanatory variable can used (whether it is a true explanatory or the response variable itself) and only a normal assumption for the response is made.  For multiple explanatory variables and for different distributions within \code{gamlss} use the additive function \code{la}.  
 }
 \value{
 Returns  \code{penLags} objects which has several method.   
@@ -47,7 +47,7 @@ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for lo
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}). 
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}). 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.}

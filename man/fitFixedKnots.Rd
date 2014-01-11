@@ -1,24 +1,23 @@
-\name{fitFixBP}
+\name{fitFixedKnots}
 
-\alias{fitFixBP}
+\alias{fitFixedKnots}
 \alias{fitFreeKnots}
 \title{Functions to Fit Univariate Break Point Regression Models}
 \description{
-There are two main functions here. The functions \code{fitFixBP} allows the fit a univariate regression using 
-piecewise polynomials with "known" break points while the function \code{fitFreeKnots} estimates the break points.  
+There are two main functions here. The functions \code{fitFixedKnots} allows the fit a univariate regression using piecewise polynomials with "known" break points while the function \code{fitFreeKnots} estimates the break points.  
 }
 \usage{
-fitFixBP(x, y, w = NULL, knots = NULL, data = NULL, degree = 3, 
+fitFixedKnots(y, x, weights = NULL, knots = NULL, data = NULL, degree = 3, 
              fixed = NULL, base=c("trun","Bbase"), ...)
-fitFreeKnots(x, y, w = NULL, knots = NULL, degree = 3, fixed =
+fitFreeKnots(y, x, weights = NULL, knots = NULL, degree = 3, fixed =
                  NULL, trace = 0, data = NULL, base=c("trun","Bbase"), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{the x variable (explanatory)}
   \item{y}{the response variable}
-  \item{w}{the prior weights}
-  \item{knots}{the position of the interior knots for  \code{fitFixBP} or starting values for \code{fitFreeKnots}}
+  \item{weights}{the prior weights}
+  \item{knots}{the position of the interior knots for  \code{fitFixedKnots} or starting values for \code{fitFreeKnots}}
   \item{data}{the data frame}
   \item{degree}{the degree if the piecewise  polynomials}
   \item{fixed}{this is to be able to fit fixed break points}
@@ -31,7 +30,7 @@ The functions \code{fitFreeKnots()} is loosely based on the  \code{curfit.free.k
 \pkg{DierckxSpline} of  Sundar Dorai-Raj and Spencer Graves. 
 }
 \value{
-The functions \code{fitFixBP} and \code{fitFreeKnots} return an object \code{FixBreakPointsReg} and 
+The functions \code{fitFixedKnots} and \code{fitFreeKnots} return an object \code{FixBreakPointsReg} and 
 \code{FreeBreakPointsReg} respectively with the following items:
  \item{fitted.values}{the fitted values of the model}
  \item{residuals}{the residuals of the model}
@@ -57,7 +56,7 @@ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for lo
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}) 
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}) 
 
 }
 \author{
@@ -94,12 +93,12 @@ knot <- 5
  plot(y~x, xlim=c(-1,13), ylim=c(3,18))
 
 # fit model using fixed break points
- m1 <- fitFixBP(x, y, knots=5, degree=1)
+ m1 <- fitFixedKnots(y, x, knots=5, degree=1)
 knots(m1)
 lines(fitted(m1)~x, col="red")
 
 # now estimating the knot
-m2 <- fitFreeKnots(x, y, knots=5, degree=1)
+m2 <- fitFreeKnots(y, x, knots=5, degree=1)
 knots(m2)
 summary(m2)
 
@@ -110,11 +109,11 @@ points(-2:13,predict(m2, newdata=-2:13), col="red",pch = 21, bg="blue")
 points(-2:13,predict(m2, newdata=-2:13, old.x.range=FALSE), col="red",pch = 21, bg="grey")
 
 # fit different basis 
-m21 <- fitFreeKnots(x, y, knots=5, degree=1, base="Bbase")
+m21 <- fitFreeKnots(y, x, knots=5, degree=1, base="Bbase")
 deviance(m2) 
 deviance(m21) # should be identical
 
-# predicting with m21
+# predicting with m21 
  plot(y~x, xlim=c(-5,13), ylim=c(3,18))
 lines(fitted(m21)~x, col="green", lwd=3)
 points(-2:13,predict(m21, newdata=-2:13), col="red",pch = 21, bg="blue")
