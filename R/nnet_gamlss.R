@@ -11,7 +11,7 @@ nn <-function(formula, control=nn.control(...), ...)
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call())
+    scall <-  deparse(sys.call(), width.cutoff = 500L)
 # check the formula
  if (!is(formula, "formula")) stop("formula argument in nn() needs a formula starting with ~")
 # get where "gamlss" is in system call

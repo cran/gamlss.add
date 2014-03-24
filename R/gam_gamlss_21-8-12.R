@@ -4,14 +4,14 @@
 # which is used in the backfitting 
 # Author Mikis Stasinopoulos
 # latest change 21--8-12 MS
-#----------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 ga <-function(formula, control=ga.control(...),...) 
 { 
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call(), width.cutoff = 200L) # 14-oct-2013 DS deparse(sys.call())
+    scall <- deparse(sys.call(), width.cutoff = 500L) # 14-oct-2013 DS deparse(sys.call())
 if (!is(formula, "formula")) stop("formula argument in ga() needs a formula starting with ~")
 # get where "gamlss" is in system call
 # it can be in gamlss() or predict.gamlss()
@@ -80,7 +80,7 @@ ga.control <-  function (offset=NULL, method="GCV.Cp",
 #--------------------------------------------------------------------------------------
 # the definition of the backfitting additive function
 gamlss.ga <-function(x, y, w, xeval = NULL, ...)
-{              
+{     
    formula <- attr(x,"formula")
    formula <- as.formula(paste("Y.var",deparse(formula), sep=""))
   control <- as.list(attr(x, "control"))  

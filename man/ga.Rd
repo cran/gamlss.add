@@ -146,7 +146,7 @@ vis.gam(ga5)
 vis.gam(getSmo(gn5))
 par(op)
 #----------------------------------------------------------
-## use of Markov random fields
+## use of Markov random fields 
 ## example from package mgcv of Simon Wood
 ## Load Columbus Ohio crime data (see ?columbus for details and credits)
 data(columb)       ## data frame

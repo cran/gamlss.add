@@ -8,7 +8,7 @@ la <-function(x, control=la.control(...), ...)
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call())
+    scall <- deparse(sys.call(), width.cutoff = 500L)
 # get where "gamlss" is in system call
 # it can be in gamlss() or predict.gamlss()       
     rexpr <- grepl("gamlss",sys.calls()) ## 

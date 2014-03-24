@@ -8,7 +8,7 @@ fk <-function(x, start=NULL, control=fk.control(...), ...)
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call())
+    scall <- deparse(sys.call(), width.cutoff = 500L)
 # get where "gamlss" is in system call
 # it can be in gamlss() or predict.gamlss()       
     rexpr <- grepl("gamlss",sys.calls()) ## 
@@ -26,7 +26,7 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
   startLambdaName <- paste("start.Lambda",fourLetters, sep=".")
 ## put the starting values in the gamlss()environment
 #--------
-   assign(startLambdaName, c(start,1), envir=gamlss.env)
+   assign(startLambdaName, list(start=start,iter=1), envir=gamlss.env)
       len <- length(x) # get the lenth of the data
 ## out
      xvar <- rep(0,  len) #
@@ -55,9 +55,10 @@ gamlss.fk <-function(x, y, w, xeval = NULL, ...)
          degree <- control$degree
      gamlss.env <- as.environment(attr(x, "gamlss.env"))
 startLambdaName <- as.character(attr(x, "NameForLambda"))  
-         lambda <- get(startLambdaName, envir=gamlss.env)[1]
-    ifFirstIter <- get(startLambdaName, envir=gamlss.env)[2]
+         lambda <- get(startLambdaName, envir=gamlss.env)$start
+    ifFirstIter <- get(startLambdaName, envir=gamlss.env)$iter
       ## geting the starting knots 
+      cat(lambda)
      if (control$all.fixed==TRUE||ifFirstIter)
      {
       fit <- fitFixedKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed,  base=control$base)
@@ -67,10 +68,10 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
        fit <- fitFreeKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base)     
      }
      #     browser()      
-    #   cat("knot", knots(fit), "\n")
+       cat("knot", knots(fit), "\n")
     #  plot(y~xvar)
     #  lines(fitted(fit)~xvar, col="red")
-        assign(startLambdaName, c(fit$breakPoints,0), envir=gamlss.env)
+        assign(startLambdaName, list(start=fit$breakPoints,iter=0), envir=gamlss.env)
   if (is.null(xeval))
    {
    list(fitted.values=fitted(fit), residuals=y-fitted(fit),  nl.df = fit$df-1,# -1 if linear is not in
