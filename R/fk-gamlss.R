@@ -58,7 +58,7 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
          lambda <- get(startLambdaName, envir=gamlss.env)$start
     ifFirstIter <- get(startLambdaName, envir=gamlss.env)$iter
       ## geting the starting knots 
-      cat(lambda)
+   #   cat(lambda)
      if (control$all.fixed==TRUE||ifFirstIter)
      {
       fit <- fitFixedKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed,  base=control$base)
@@ -68,7 +68,7 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
        fit <- fitFreeKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base)     
      }
      #     browser()      
-       cat("knot", knots(fit), "\n")
+    #   cat("knot", knots(fit), "\n")
     #  plot(y~xvar)
     #  lines(fitted(fit)~xvar, col="red")
         assign(startLambdaName, list(start=fit$breakPoints,iter=0), envir=gamlss.env)

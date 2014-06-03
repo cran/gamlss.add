@@ -82,7 +82,7 @@ ga.control <-  function (offset=NULL, method="GCV.Cp",
 gamlss.ga <-function(x, y, w, xeval = NULL, ...)
 {     
    formula <- attr(x,"formula")
-   formula <- as.formula(paste("Y.var",deparse(formula), sep=""))
+   formula <- as.formula(paste("Y.var", deparse(formula, width.cutoff = 500L), sep=""))
   control <- as.list(attr(x, "control"))  
 #gamlss.env <- as.environment(attr(x, "gamlss.env"))
       OData <- attr(x,"data") 

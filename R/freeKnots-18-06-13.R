@@ -146,7 +146,8 @@ fitFixedKnots <- function(y, x,
 # print 
 print.FixBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {
- cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
+ cat("\nCall: ", deparse(x$call),  "\n", fill=TRUE)
+ #cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     if (length(coef(x))) {
         cat("Coefficients:\n")
         print.default(format(coef(x), digits = digits), print.gap = 2, quote = FALSE)
@@ -352,7 +353,8 @@ fitFreeKnots <- function(y,x,
 # print 
 print.FreeBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {
- cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
+	cat("\nCall: ", deparse(x$call),  "\n", fill=TRUE)
+ #cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     if (length(coef(x))) {
         cat("Coefficients:\n")
         print.default(format(coef(x), digits = digits), print.gap = 2, quote = FALSE)

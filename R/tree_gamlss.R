@@ -48,7 +48,7 @@ attr(xvar, "gamlss.env") <- gamlss.env
 gamlss.tr <-function(x, y, w, xeval = NULL, ...)
 {
      formula <- attr(x,"formula")
-     formula <- as.formula(paste("y",deparse(formula), sep=""))
+     formula <- as.formula(paste("y",deparse(formula, width.cutoff = 500L), sep=""))
       method <- attr(x, "method")
      control <- as.list(attr(x, "control"))
   gamlss.env <- as.environment(attr(x, "gamlss.env"))

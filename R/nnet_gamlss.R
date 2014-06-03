@@ -106,7 +106,7 @@ warning("the value of reltol supplied is negative the default value of  1.0e-8 w
 gamlss.nn <-function(x, y, w, xeval = NULL, ...)
 {       
         formula <- attr(x,"formula")
-        formula <- as.formula(paste("y",deparse(formula), sep=""))
+        formula <- as.formula(paste("y",deparse(formula, width.cutoff = 500L), sep=""))
         control <- as.list(attr(x, "control"))
   ifStartedName <- as.character(attr(x, "ifStartedName")) # get the of the logical 
   theOldWtsName <- paste("theOldWts",substr(ifStartedName, 11, 15),sep="") # create a name for the Wts
