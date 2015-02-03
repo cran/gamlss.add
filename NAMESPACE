@@ -8,13 +8,16 @@ export(ga, ga.control, gamlss.ga,
        fitFixedKnots, fitFreeKnots,
        tr, gamlss.tr)
 
+importFrom(splines, splineDesign)
+importFrom(gamlss.dist, dNO, pNO, qNO)
 importFrom(stats, knots, coef, fitted, predict, residuals)
-importFrom(gamlss)
+import(gamlss)
+
 #importFrom(gamlss.nl)
-importFrom(nnet)
+importFrom(nnet, nnet)
 #importFrom(lattice)
-importFrom(mgcv)
-importFrom(rpart)
+importFrom(mgcv, gam, gam.control)
+importFrom(rpart, rpart.control, rpart)
 
 
 S3method(fitted, penlags)
@@ -27,7 +30,7 @@ S3method(plot, penlags)
 S3method(predict, penlags)
 S3method(residuals, penlags)
 
-
+S3method(plot, nnet)
 
 S3method(print, FixBreakPointsReg)
 S3method(fitted, FixBreakPointsReg)

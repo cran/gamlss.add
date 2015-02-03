@@ -11,7 +11,7 @@
 #      6) predict()
 #  iii) fitFreeKnots()
 #   iv) Methods for FreeBreakPointsReg
-#       1) pint()
+#       1) print()
 #       2) fitted()
 #       3) resid()
 #       4) coef()

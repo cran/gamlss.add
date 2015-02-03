@@ -12,7 +12,7 @@ tr <-function(formula, method=c("rpart"), control=rpart.control(...), ...) #  ,"
     method <- match.arg(method)
      scall <-  deparse(sys.call(), width.cutoff = 200L)
 # check the formula
-if (!is(formula, "formula")) stop("formula argument in nn() needs a formula starting with ~")
+if (!is(formula, "formula")) stop("formula argument in tr() needs a formula starting with ~")
 # get where "gamlss" is in system call
 # it can be in gamlss() or predict.gamlss()       
 rexpr <- grepl("gamlss",sys.calls()) ## 
@@ -23,15 +23,24 @@ for (i in length(rexpr):1)
 }
 gamlss.env <- sys.frame(position) #gamlss or predict.gamlss# 
 if (sys.call(position)[1]=="predict.gamlss()")
-{
+{ # if predict is used 
   Data <- get("data", envir=gamlss.env)
 }
-else { 
-  if (is.null(get("gamlsscall", envir=gamlss.env)$data)) stop("the option data in gamlss() is required for nn() to work")
-  Data <- get("gamlsscall", envir=gamlss.env)$data
+else if (sys.call(position)[1]=="gamlss()") 
+{ # if gamlss() is used
+  if (is.null(get("gamlsscall", envir=gamlss.env)$data)) 
+  { # if no data argument but the formula can be interpreted
+    Data <- model.frame(formula)  
+  }
+  else
+  {# data argument in gamlss 
+    Data <- get("gamlsscall", envir=gamlss.env)$data
+  }
 }
-      Data <- data.frame(eval(substitute(Data))) 
-       len <- dim(Data)[1] # get the lenth of the data
+else  {Data <- get("data", envir=gamlss.env)}
+Data <- data.frame(eval(substitute(Data)))
+#===== 
+len <- dim(Data)[1] # get the lenth of the data
       xvar <- rep(0, len)
    attr(xvar, "formula") <- formula
    attr(xvar, "method")  <- method

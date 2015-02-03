@@ -11,8 +11,9 @@ ga <-function(formula, control=ga.control(...),...)
 #------------------------------------------
 # function starts here
 #------------------------------------------
-    scall <- deparse(sys.call(), width.cutoff = 500L) # 14-oct-2013 DS deparse(sys.call())
-if (!is(formula, "formula")) stop("formula argument in ga() needs a formula starting with ~")
+    scall <- deparse(sys.call(), width.cutoff = 500L) # 14-oct-2013 DS 
+if (!is(formula, "formula")) 
+  stop("formula argument in ga() needs a formula starting with ~")
 # get where "gamlss" is in system call
 # it can be in gamlss() or predict.gamlss()
     rexpr <- grepl("gamlss",sys.calls()) ## 
@@ -25,12 +26,15 @@ for (i in length(rexpr):1)
 gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
 ##---
 ## get the data
+## this has been modified on the 12-12-14 to make sure that 
+##  if model.frame.gamlss() is used as for example in term.plot() the
+## function does not fails (It need to implemented to all smoother using formulea?)
 if (sys.call(position)[1]=="predict.gamlss()")
      { # if predict is used 
       Data <- get("data", envir=gamlss.env)
      }
-else { # if gamlss() is used
-	#stop("the option data in gamlss() is required for lo() to work")
+else if (sys.call(position)[1]=="gamlss()") 
+     { # if gamlss() is used
      if (is.null(get("gamlsscall", envir=gamlss.env)$data)) 
          { # if no data argument but the formula can be interpreted
      Data <- model.frame(formula)	
@@ -40,6 +44,7 @@ else { # if gamlss() is used
      Data <- get("gamlsscall", envir=gamlss.env)$data
          }
      }
+else  {Data <- get("data", envir=gamlss.env)}
      Data <- data.frame(eval(substitute(Data)))
      #===== 
       len <- dim(Data)[1] # get the lenth of the data

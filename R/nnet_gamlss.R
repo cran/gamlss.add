@@ -26,15 +26,24 @@ gamlss.env <- sys.frame(position) #gamlss or predict.gamlss
 ##---
 ## get the data
 if (sys.call(position)[1]=="predict.gamlss()")
-     {
-      Data <- get("data", envir=gamlss.env)
-     }
-else { 
-      if (is.null(get("gamlsscall", envir=gamlss.env)$data)) stop("the option data in gamlss() is required for nn() to work")
-     Data <- get("gamlsscall", envir=gamlss.env)$data
-     }
-     Data <- data.frame(eval(substitute(Data))) 
-      len <- dim(Data)[1] # get the lenth of the data
+{ # if predict is used 
+  Data <- get("data", envir=gamlss.env)
+}
+else if (sys.call(position)[1]=="gamlss()") 
+{ # if gamlss() is used
+  if (is.null(get("gamlsscall", envir=gamlss.env)$data)) 
+  { # if no data argument but the formula can be interpreted
+    Data <- model.frame(formula)  
+  }
+  else
+  {# data argument in gamlss 
+    Data <- get("gamlsscall", envir=gamlss.env)$data
+  }
+}
+else  {Data <- get("data", envir=gamlss.env)}
+Data <- data.frame(eval(substitute(Data)))
+#===== 
+len <- dim(Data)[1] # get the lenth of the data
 ## what we are doing with starting values 
 ## here I save only a logical variable in the envir of gamlss
 ## in gamlss.nn the Wts (coefficients for nnet) are saved 
@@ -145,6 +154,7 @@ if (is.null(xeval)) # proper fit
             df <- length(coef(fit))# ??? I am not sure about that what happents if decay is not zer0?? 
             fv <- fitted(fit) 
      residuals <- resid(fit)
+fit$call$formula <- formula
    list(fitted.values=fv, residuals=residuals,
      nl.df = df, lambda=NA,  coefSmo = fit, var=NA)    #
   }
