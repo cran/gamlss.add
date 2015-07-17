@@ -1,9 +1,9 @@
-606ae3bc700d34923e010fc3169d56e3 *DESCRIPTION
-36eba303db6667321469667f882ea86a *NAMESPACE
+cdb6a2f5c2ddde788329d80de3f5dcc6 *DESCRIPTION
+2a430b38905e9e73041eff0fa5e5cc82 *NAMESPACE
 36a5455d266a4adc7d1b18d461f4562a *R/blag-3-1-12.R
 d80f1368c850013b92f4c48b26a001df *R/fk-gamlss.R
 13c81133b60dc5c342f0f149dc30c8fb *R/freeKnots-18-06-13.R
-74aa0c3eacbe6c499665e6a97fbb715d *R/gam_gamlss.R
+1073babbcbbde0dae7a095564606b202 *R/gam_gamlss.R
 3f00521e05caefef533ac52ce6a8add0 *R/la-gamlss-3-1-12.R
 4a4f623927d0ddb617368ead507fa725 *R/nnet_gamlss.R
 d2cae78416c762db8d43a90dfa0fc99d *R/penLags-18-6-13.R
@@ -20,4 +20,4 @@ eec092c8620bf83d174ad246957c5155 *man/gamlss.nn.Rd
 e08b68264997028bc4228a81cb5e5daa *man/nn.Rd
 2666a8a0ac673a8e11b77ae3d3de6e45 *man/penLags.Rd
 b6fdc7e62e26032100cceee49d400970 *man/plotNN.Rd
-3964145824001335b045cd65f9157065 *man/tr.Rd
+c610129c3b507154e1bd1164ecf79625 *man/tr.Rd

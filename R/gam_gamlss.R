@@ -106,6 +106,8 @@ gamlss.ga <-function(x, y, w, xeval = NULL, ...)
         df <- sum(fit$edf)-1 
         fv <- fitted(fit) 
  residuals <- y-fv
+  #     var <- predict(fit, se=T)$se 
+   # the se of the fit can be obtained  using predict(getSmo(m1))$se
   if (is.null(xeval))
     {
    list(fitted.values=fv, residuals=residuals,

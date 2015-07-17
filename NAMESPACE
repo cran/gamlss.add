@@ -10,8 +10,13 @@ export(ga, ga.control, gamlss.ga,
 
 importFrom(splines, splineDesign)
 importFrom(gamlss.dist, dNO, pNO, qNO)
-importFrom(stats, knots, coef, fitted, predict, residuals)
+importFrom(utils, tail)
 import(gamlss)
+import(stats)
+import(grDevices)
+import(methods)
+import(graphics)
+
 
 #importFrom(gamlss.nl)
 importFrom(nnet, nnet)

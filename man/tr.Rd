@@ -65,7 +65,7 @@ plot(getSmo(rg2))
 text(getSmo(rg2))
 #--- fitting also model in the variance
 rg3 <- gamlss(R ~ tr(~A+Fl), sigma.fo=~tr(~Fl+A), data=rent, 
-                family=GA, gd.tol=100, c,crit=0.1)
+                family=GA, gd.tol=100, c.crit=0.1)
 plot(rg3)
 plot(getSmo(rg3))
 text(getSmo(rg3))
