@@ -1,5 +1,6 @@
 # functions
 export(ga, ga.control, gamlss.ga, 
+       ba, ga.control, gamlss.ba,
        nn, nn.control, gamlss.nn,
        la, la.control, gamlss.la,
        penLags, 
@@ -11,6 +12,7 @@ export(ga, ga.control, gamlss.ga,
 importFrom(splines, splineDesign)
 importFrom(gamlss.dist, dNO, pNO, qNO)
 importFrom(utils, tail)
+importFrom(mgcv, bam)
 import(gamlss)
 import(stats)
 import(grDevices)

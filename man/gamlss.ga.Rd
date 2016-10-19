@@ -1,16 +1,18 @@
 \name{gamlss.ga}
 \Rdversion{1.1}
 \alias{gamlss.ga}
+\alias{gamlss.ba}
 
-\title{
-Support for Function ga() 
-}
+
+\title{Support for Function ga() and ba()}
 \description{
- This is support for the  smoother function ga() an inteface for Simon Woood's \code{gam()} function.
+ This is support for the  smoother functions \code{ga()} and \code{ba()} intefaces for Simon Woood's \code{gam()} and \code{bam()}  functions from package \pkg{mgcv}.
 It is not intended to be called directly by users. 
 }
 \usage{
 gamlss.ga(x, y, w, xeval = NULL, ...)
+
+gamlss.ba(x, y, w, xeval = NULL, ...)
 }
 
 \arguments{
@@ -45,7 +47,7 @@ Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location s
 Wood S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman and Hall/CRC Press. 
 }
 \author{
-Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk}
+Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby
 }
 
 

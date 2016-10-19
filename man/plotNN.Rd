@@ -45,9 +45,9 @@ The function \code{plot.nnet()} is (almost) identical to the function \code{plot
 The function is producing a plot
 }
 \references{
-Marcus W. Beck (2015). NeuralNetTools: Visualization and Analysis Tools for Neural Networks. R package version 1.0.1. \url{http://CRAN.R-project.org/package=NeuralNetTools}
+Marcus W. Beck (2015). NeuralNetTools: Visualization and Analysis Tools for Neural Networks. R package version 1.4.1. \url{https://cran.r-project.org/package=NeuralNetTools}
 
-Hadley Wickham (2014). scales: Scale functions for graphics. R package version 0.2.4. \url{http://CRAN.R-project.org/package=scales}
+Hadley Wickham (2014). scales: Scale functions for graphics. R package version 0.4.0. \url{https://cran.r-project.org/package=scales}
 
 }
 \author{Marcus W. Beck <mbafs2012@gmail.com> modified by Mikis Stasinopoulos}

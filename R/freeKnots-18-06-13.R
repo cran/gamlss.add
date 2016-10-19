@@ -146,7 +146,7 @@ fitFixedKnots <- function(y, x,
 # print 
 print.FixBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {
- cat("\nCall: ", deparse(x$call),  "\n", fill=TRUE)
+ cat("\nCall: ", deparse(x$call,width.cutoff=50),  "\n", fill=TRUE)
  #cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     if (length(coef(x))) {
         cat("Coefficients:\n")
@@ -353,7 +353,7 @@ fitFreeKnots <- function(y,x,
 # print 
 print.FreeBreakPointsReg<-function(x, digits=max(3, getOption("digits") - 3), ...) 
 {
-	cat("\nCall: ", deparse(x$call),  "\n", fill=TRUE)
+	cat("\nCall: ", deparse(x$call,width.cutoff=50), "\n", fill=TRUE)
  #cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
     if (length(coef(x))) {
         cat("Coefficients:\n")
@@ -401,7 +401,7 @@ summary.FreeBreakPointsReg <- function(object, ...)
       tval <- par/se
    matcoef <- cbind(par, se, tval, 2*(1-pnorm(abs(tval))))
 dimnames(matcoef) <- list(names(tval), c(" Estimate"," Std. Error", " t value", "Pr(>|t|)"))
-cat("\nCall:\n", deparse(object$call), "\n\n", sep = "")
+cat("\nCall:\n", deparse(object$call,width.cutoff=50), "\n\n", sep = "")
 matcoef           
 }
 #----------------------------------------------------------------------------------------

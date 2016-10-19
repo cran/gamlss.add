@@ -2,67 +2,73 @@
 \Rdversion{1.1}
 \alias{ga}
 \alias{ga.control}
+\alias{ba}
+\alias{ba.control}
 
-\title{A interface function to use Simon Wood's gam() function within GAMLSS}
+\title{A interface functions to use Simon Wood's gam() and bam() functions within GAMLSS}
 \description{
-The \code{ga()} function is a additive function to be used within GAMLSS models. 
-It is an interface for the \code{gam()} function of package  \code{mgcv} of Simon Wood. The function \code{ga()} allows the user to use all the available smoothers of \code{gam()} within \code{gamlss}. The great advantage of course come from fitting models outside the 
+The \code{ga()} and \code{ba()}  functions are a additive functions to be used within GAMLSS models. 
+They are  interfaces for the \code{gam()} and the \code{bam()} functions of package  \code{mgcv} of Simon Wood. The functions  \code{gam()} and the \code{bam()} allows the user to use all the available smoothers of the package \code{mcgv()} within \code{gamlss}. The great advantage of course come from fitting models outside the 
 exponential family.    
 }
 \usage{
 ga(formula, control = ga.control(...), ...)
 
-ga.control(offset = NULL, method = "GCV.Cp", optimizer = c("outer", "newton"), 
-        control = list(), select = FALSE, knots = NULL,
-        sp = NULL, min.sp = NULL, H = NULL, gamma = 1, 
-        fit = TRUE, paraPen = NULL, G = NULL, in.out = NULL, ...)
+ba(formula, control = ba.control(...), ...)
 
+ga.control(offset = NULL, method = "REML", optimizer = c("outer", 
+          "newton"), select = FALSE, knots = NULL,sp = NULL, 
+          min.sp = NULL, H = NULL, gamma = 1, paraPen = NULL, 
+          in.out = NULL, drop.unused.levels = TRUE,
+          drop.intercept = NULL, ...)
+
+ba.control(offset = NULL, method = "fREML", select = FALSE, 
+          scale = 0, gamma = 1, knots = NULL, sp = NULL, 
+          min.sp = NULL, paraPen = NULL, chunk.size = 10000, 
+          rho = 0, AR.start = NULL, discrete = FALSE, 
+          cluster = NULL, nthreads = NA, gc.level = 1, 
+          use.chol = FALSE, samfrac = 1, drop.unused.levels = TRUE, 
+          drop.intercept = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{formula}{ A formula containing \code{s()} and \code{te} functions i.e. ~s(x1)+ te(x2,x3).}
   \item{control}{this allow to specify argument within the function \code{gam()} of \code{mgcv}}
-  \item{\dots}{arguments used by the \code{gam()} function.}
-  \item{offset}{the \code{offset} argument in \code{gam()}}
-  \item{method}{the \code{method} argument in \code{gam()}}
+  \item{offset}{the \code{offset} argument in \code{gam()} and \code{bam()}}
+  \item{method}{the \code{method} argument in \code{gam()} and \code{bam()}}
   \item{optimizer}{the method optimizer in \code{gam()}}
-  \item{select}{the \code{select} argument in \code{gam()}}
-  \item{knots}{the \code{knots} argument in \code{gam()}}
-  \item{sp}{the \code{sp} argument in \code{gam()}}
-  \item{min.sp}{
-the \code{min.sp} argument in \code{gam()}
-}
-  \item{H}{
-the \code{H} argument in \code{gam()}
-}
-  \item{gamma}{
-the \code{gamma} argument in \code{gam()}
-}
-  \item{fit}{
-the \code{fit} argument in \code{gam()}
-}
-  \item{paraPen}{
-the \code{paraPen} argument in \code{gam()}
-}
-  \item{G}{
-the \code{G} argument in \code{gam()}
-}
-  \item{in.out}{
-the \code{in.out} argument in \code{gam()}
-}
-
+  \item{select}{the \code{select} argument in \code{gam()} and \code{bam()}}
+  \item{knots}{the \code{knots} argument in \code{gam()} and \code{bam()}}
+  \item{sp}{the \code{sp} argument in \code{gam()} and \code{bam()}}
+  \item{min.sp}{the \code{min.sp} argument in \code{gam()} and \code{bam()}}
+  \item{H}{a user supplied fixed quadratic penalty on the parameters in \code{gam()}}
+  \item{gamma}{the \code{gamma} argument in \code{gam()} and \code{bam()}}
+  \item{paraPen}{the \code{paraPen} argument in \code{gam()} and \code{bam()}}
+  \item{in.out}{the \code{in.out} argument in \code{gam()}}
+  \item{drop.unused.levels}{by default unused levels are dropped from factors before fitting for \code{gam()} and \code{bam()}}
+  \item{drop.intercept}{set to TRUE to force the model to really not have the a constant in the parametric model part for \code{gam()} and \code{bam()}}
+    \item{scale}{scale parameter for \code{bam()} (should not used in gamlss)}
+  \item{chunk.size}{the model matrix is created in chunks used in \code{bam()}}
+  \item{rho}{an AR1 error model can be used for the residuals see the help in \code{bam()}}
+  \item{AR.start}{see the help in \code{bam()} for explanation}
+  \item{discrete}{with method="fREML" it is possible to discretize covariates see the help in \code{bam()}}
+  \item{cluster}{whether QR decomposition in parallel see the help in \code{bam()} }
+  \item{nthreads}{number of threads to use for non-cluster computation see the help in \code{bam()}}
+  \item{gc.level}{to keep the memory footprint down see the help in \code{bam()} }
+  \item{use.chol}{whether Choleski decomposition see the help in \code{bam()}}
+  \item{samfrac}{sampling fraction see the help in \code{bam()}}
+   \item{\dots}{extra options to pass to gam.control()}
 }
 \details{
 Note that \code{ga} itself does no smoothing; it simply sets things up for the function \code{gamlss()} which in turn uses the function 
-  \code{additive.fit()} for backfitting which in turn uses \code{gamlss.ga()}
+  \code{additive.fit()} for back-fitting which in turn uses \code{gamlss.ga()}
 
 Note that, in our (limited) experience,  for normal errors or exponential family, the  fitted models using \code{gam()} 
 and \code{ga()} within \code{gamlss()} are identical
 or at least very similar.  This is particularly true if the default values for \code{gam()} are used.   
    
 }
-\value{
-the fitted values of the smoother is returned, endowed with a number of attributes. 
+\value{ the fitted values of the smoother is returned, endowed with a number of attributes. 
 The smoother fitted values are used in the construction of the overall fitted values of the particular distribution parameter.
 The attributes can be use to obtain information about the individual fit. In particular the \code{coefSmo} within the parameters
 of the fitted model contains the final additive fit.
@@ -81,7 +87,7 @@ Wood S.N. (2006) Generalized Additive Models: An Introduction with R. Chapman an
 }
 \author{Mikis Stasinopoulos}
 
-\section{Warning }{The function id experimental so please report any peculiar behaviour to the authors} 
+\section{Warning }{The function is experimental so please report any peculiar behaviour to the authors} 
 
 
 \examples{
@@ -192,5 +198,6 @@ names(fv1) <- as.character(columb$district)
 polys.plot(columb.polys,fv)
 polys.plot(columb.polys,fv1)
 par(op)}
+## bam 
 }
 \keyword{regression}

@@ -6,7 +6,7 @@
 A interface function to use rpart() function within GAMLSS
 }
 \description{
-The tr() function is a additive function to be used for GAMLSS models. It is an interface for the \code{rpart()} function of package \code{rpart}. The function tr() allows the user to use regression tres within gamlss. The great advantage of course comes from the fact GAMLSS models provide a variety of distributions and diagnostics. Note that the function gamlss.tr is not used by the user but it needed for the backfitting.
+The tr() function is a additive function to be used for GAMLSS models. It is an interface for the \code{rpart()} function of package \code{rpart}. The function tr() allows the user to use regression trees within gamlss. The great advantage of course comes from the fact GAMLSS models provide a variety of distributions and diagnostics. Note that the function gamlss.tr is not used by the user but it needed for the backfitting.
 }
 \usage{
 tr(formula, method = c("rpart"), control = rpart.control(...), ...)
@@ -32,6 +32,7 @@ Note that \code{tr} itself does no smoothing; it simply sets things up for the f
 The result is a \code{rpart} object.
 }
 \references{
+
 Ripley, B. D. (1996) Pattern Recognition and Neural Networks. Cambridge. 
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
@@ -40,11 +41,15 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
 
+Therneau T. M., Atkinson E. J. (2015) An Introduction to Recursive Partitioning Using the RPART Routines. Vignette in package rpart.
+
 Venables, W. N. and Ripley, B. D. (2002) Modern Applied Statistics with S. Fourth edition. Springer. 
+
+
 
 }
 \author{
-Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk} based on work of Therneau and Atkison (19)
+Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby  based on work of Therneau and Atkison (2015)
 }
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 \seealso{See Also as \code{\link{nn}}}

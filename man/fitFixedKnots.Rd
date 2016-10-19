@@ -60,7 +60,7 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 }
 \author{
-Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}
+Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}
 }
 \note{
 The prediction function in piecewise polynomials using the B-spline basis is tricky because by adding the newdata for x to the current one the B-basis function for the piecewise polynomials changes.  This does not seems to be the case with the truncated basis, that is, when the option \code{base="turn"} is used (see the example below).
