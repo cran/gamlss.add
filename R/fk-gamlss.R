@@ -67,7 +67,6 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
      {
        fit <- fitFreeKnots(y=y, x=xvar,  weights=w, degree=degree, knots = lambda, fixed=control$fixed, base=control$base)     
      }
-     #     browser()      
     #   cat("knot", knots(fit), "\n")
     #  plot(y~xvar)
     #  lines(fitted(fit)~xvar, col="red")

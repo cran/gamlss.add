@@ -3,7 +3,7 @@
 # which is used in the backfitting 
 #----------------------------------------------------------------------------------------
 # this function need several argument which can not pass throught ...
-#x, y, weights, size, Wts, mask,
+# x, y, weights, size, Wts, mask,
 #     maxit = 100, Hess = FALSE, trace = TRUE, MaxNWts = 1000,
 #     abstol = 1.0e-4, reltol = 1.0e-8, 
 nn <-function(formula, control=nn.control(...), ...)           

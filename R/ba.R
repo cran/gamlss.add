@@ -8,7 +8,7 @@ ba <-function(formula, control = ba.control(...), ...)
   #------------------------------------------
   # function starts here
   #------------------------------------------    
-  scall <- deparse(sys.call(), width.cutoff = 500L) 
+  scall <- Reduce(paste, deparse(sys.call(), width.cutoff = 500L)) 
   if (!is(formula, "formula")) 
     stop("formula argument in ba() needs a formula starting with ~")
   # get where "gamlss" is in system call, it can be in gamlss() or predict.gamlss()
@@ -37,21 +37,44 @@ ba <-function(formula, control = ba.control(...), ...)
 #-------------------------------------------------
   # new Daniil and Vlasis
   # Initialize bam
-  formula <- as.formula(paste0("Y.var", deparse(formula, width.cutoff = 500L)))
+  formula <- as.formula(paste0("Y.var", Reduce(paste,deparse(formula, width.cutoff = 500L)) ))
   Data$Y.var = rep(0, nrow(Data))
-    G = bam(formula, data=Data,
-          offset=control$offset, method=control$method,
-          control=control$control, select=control$select, 
-          scale=control$scale, gamma=control$gamma, 
-          knots=control$knots, sp=control$sp, min.sp=control$min.sp,
-          paraPen=control$paraPen, chunk.size=control$chunk.size, 
-          rho=control$rho, AR.start=control$AR.start, 
-          discrete=control$discrete,
-          cluster=control$cluster, nthreads=control$nthreads,
-          gc.level=control$gc.level, use.chol=control$use.chol,
-          samfrac=control$samfrac, 
-          drop.unused.levels=control$bam$drop.unused.levels, 
-          G=NULL, fit=FALSE, ...)
+  #browser()
+    G = bam(formula, 
+          data = Data,
+        offset = control$offset,
+        method = control$method,
+       control = control$control,
+        select = control$select, 
+         scale = control$scale, 
+         gamma = control$gamma, 
+         knots = control$knots, 
+            sp = control$sp,
+        min.sp = control$min.sp,
+       paraPen = control$paraPen, 
+    chunk.size = control$chunk.size, 
+           rho = control$rho, 
+      AR.start = control$AR.start, 
+      discrete = control$discrete,
+       cluster = control$cluster, 
+      nthreads = control$nthreads,
+      gc.level = control$gc.level, 
+      use.chol = control$use.chol,
+       samfrac = control$samfrac, 
+          coef = control$coef, 
+  drop.unused.levels = control$drop.unused.levels, 
+drop.intercept = control$drop.intercept,
+             G = NULL,
+           fit = FALSE
+  )
+##bam(formula, family=gaussian(), 
+##      data=list()#, weights=NULL, subset=NULL,
+#    na.action=na.omit, offset=NULL#, method="fREML"#,control=list()#,
+#    select=FALSE#, scale=0#,gamma=1,knots=NULL,sp=NULL,min.sp=NULL,
+#    paraPen=NULL,chunk.size=10000,rho=0,AR.start=NULL,discrete=FALSE,
+#    cluster=NULL,nthreads=1,gc.level=1,use.chol=FALSE,samfrac=1,
+#    coef=NULL,drop.unused.levels=TRUE,G=NULL,fit=TRUE,drop.intercept=NULL,...)
+#
  #-------------------------------------------------- 
   xvar <- rep(0,  dim(Data)[1]) 
   attr(xvar,"formula")     <- formula
@@ -67,7 +90,7 @@ ba <-function(formula, control = ba.control(...), ...)
 #--------------------------------------------------------------------------------------
 ba.control = function(offset = NULL, 
                       method = "fREML", 
-                 # optimizer = c("outer","newton"), 
+                     control = list(), 
                       select = FALSE,
                        scale = 0,
                        gamma = 1, 
@@ -78,12 +101,13 @@ ba.control = function(offset = NULL,
                   chunk.size = 10000,
                          rho = 0,
                     AR.start = NULL,
-                    discrete = FALSE,
+                    discrete = TRUE,
                      cluster = NULL,
-                    nthreads = NA,
+                    nthreads = 2,
                     gc.level = 1,
                     use.chol = FALSE,
                      samfrac = 1,
+                        coef = NULL,
           drop.unused.levels = TRUE,
               drop.intercept = NULL, 
                                ...)  
@@ -91,12 +115,13 @@ ba.control = function(offset = NULL,
   #gam()
   control <- gam.control(...)
   #ga()
-  list( offset=offset, method=method, select=select, control=control,
+  list( offset=offset, method=method, control=control,  select=select,
         scale=scale, gamma=gamma, knots=knots, sp=sp, min.sp=min.sp,
-        paraPen = paraPen, chunk.size = chunk.size,rho = rho,
+        paraPen = paraPen, chunk.size = chunk.size, rho = rho,
         AR.start = AR.start,
         discrete=discrete,  cluster=cluster, nthreads=nthreads,
         gc.level=gc.level, use.chol=use.chol, samfrac=samfrac,
+        coef= coef,
         drop.unused.levels = drop.unused.levels,
         drop.intercept=drop.intercept, ...)
 }
@@ -105,15 +130,26 @@ ba.control = function(offset = NULL,
 gamlss.ba <-function(x, y, w, xeval = NULL, ...) {
   if (is.null(xeval))
   {#fitting
-             bam <- attr(x, "bam")
            Y.var <- y
            W.var <- w
-               G <- attr(x,"G") 
+             G <- attr(x,"G")
+             control = attr(x,"control")
              G$y <- Y.var
              G$w <- W.var
       G$mf$Y.var <- Y.var
 G$mf$`(weights)` <- W.var
-             fit <-  bam(G=G, fit=TRUE)
+             fit <-  bam(G=G, fit=TRUE,
+                     offset=control$offset, method=control$method,
+                     control=control$control, select=control$select, 
+                     scale=control$scale, gamma=control$gamma, 
+                     knots=control$knots, sp=control$sp, min.sp=control$min.sp,
+                     paraPen=control$paraPen, chunk.size=control$chunk.size, 
+                     rho=control$rho, AR.start=control$AR.start, 
+                     discrete=control$discrete,
+                     cluster=control$cluster, nthreads=control$nthreads,
+                     gc.level=control$gc.level, use.chol=control$use.chol,
+                     samfrac=control$samfrac, 
+                     drop.unused.levels=control$bam$drop.unused.levels)
               df <- sum(fit$edf)-1 
               fv <- fitted(fit) 
        residuals <- y-fv

@@ -16,29 +16,34 @@ ga(formula, control = ga.control(...), ...)
 
 ba(formula, control = ba.control(...), ...)
 
-ga.control(offset = NULL, method = "REML", optimizer = c("outer", 
-          "newton"), select = FALSE, knots = NULL,sp = NULL, 
-          min.sp = NULL, H = NULL, gamma = 1, paraPen = NULL, 
-          in.out = NULL, drop.unused.levels = TRUE,
-          drop.intercept = NULL, ...)
+ga.control(offset = NULL, method = "REML",
+         optimizer = c("outer", "newton"), control = list(), 
+         scale = 0, select = FALSE, knots = NULL, 
+         sp = NULL, min.sp = NULL, H = NULL, gamma = 1, 
+         paraPen = NULL, in.out = NULL, 
+         drop.unused.levels = TRUE, drop.intercept = NULL, 
+         discrete = FALSE, ...)
+     
+ba.control(offset = NULL, method = "fREML", control = list(), 
+          select = FALSE, scale = 0, gamma = 1, knots = NULL, 
+          sp = NULL, min.sp = NULL, paraPen = NULL, 
+          chunk.size = 10000, rho = 0, AR.start = NULL, 
+          discrete = TRUE, cluster = NULL, nthreads = 2, 
+          gc.level = 1, use.chol = FALSE, samfrac = 1, 
+          coef = NULL, drop.unused.levels = TRUE, 
+          drop.intercept = NULL, ...)     
 
-ba.control(offset = NULL, method = "fREML", select = FALSE, 
-          scale = 0, gamma = 1, knots = NULL, sp = NULL, 
-          min.sp = NULL, paraPen = NULL, chunk.size = 10000, 
-          rho = 0, AR.start = NULL, discrete = FALSE, 
-          cluster = NULL, nthreads = NA, gc.level = 1, 
-          use.chol = FALSE, samfrac = 1, drop.unused.levels = TRUE, 
-          drop.intercept = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{formula}{ A formula containing \code{s()} and \code{te} functions i.e. ~s(x1)+ te(x2,x3).}
-  \item{control}{this allow to specify argument within the function \code{gam()} of \code{mgcv}}
-  \item{offset}{the \code{offset} argument in \code{gam()} and \code{bam()}}
+  \item{offset}{the offset in the formula}
   \item{method}{the \code{method} argument in \code{gam()} and \code{bam()}}
   \item{optimizer}{the method optimizer in \code{gam()}}
+  \item{control}{values for the \code{gam.control()}}
+  \item{scale}{for the scale parameter}
   \item{select}{the \code{select} argument in \code{gam()} and \code{bam()}}
-  \item{knots}{the \code{knots} argument in \code{gam()} and \code{bam()}}
+  \item{knots}{the \code{knots} argument in \code{gam()} and \code{bam()}}  
   \item{sp}{the \code{sp} argument in \code{gam()} and \code{bam()}}
   \item{min.sp}{the \code{min.sp} argument in \code{gam()} and \code{bam()}}
   \item{H}{a user supplied fixed quadratic penalty on the parameters in \code{gam()}}
@@ -47,17 +52,20 @@ ba.control(offset = NULL, method = "fREML", select = FALSE,
   \item{in.out}{the \code{in.out} argument in \code{gam()}}
   \item{drop.unused.levels}{by default unused levels are dropped from factors before fitting for \code{gam()} and \code{bam()}}
   \item{drop.intercept}{set to TRUE to force the model to really not have the a constant in the parametric model part for \code{gam()} and \code{bam()}}
-    \item{scale}{scale parameter for \code{bam()} (should not used in gamlss)}
-  \item{chunk.size}{the model matrix is created in chunks used in \code{bam()}}
-  \item{rho}{an AR1 error model can be used for the residuals see the help in \code{bam()}}
-  \item{AR.start}{see the help in \code{bam()} for explanation}
-  \item{discrete}{with method="fREML" it is possible to discretize covariates see the help in \code{bam()}}
-  \item{cluster}{whether QR decomposition in parallel see the help in \code{bam()} }
-  \item{nthreads}{number of threads to use for non-cluster computation see the help in \code{bam()}}
-  \item{gc.level}{to keep the memory footprint down see the help in \code{bam()} }
-  \item{use.chol}{whether Choleski decomposition see the help in \code{bam()}}
-  \item{samfrac}{sampling fraction see the help in \code{bam()}}
-   \item{\dots}{extra options to pass to gam.control()}
+  \item{discrete}{see \code{bam} and \code{gam} for details}
+  \item{chunk.size}{see the help for \code{bam()}.}
+  \item{rho}{for an \code{AR1} error model, see the help for \code{bam()}  }
+  \item{AR.start}{for an \code{AR1} error model, see the help for \code{bam()}}
+  \item{cluster}{see the help for \code{bam()}}
+  \item{nthreads}{
+Number of threads to use for non-cluster computation see  the help for \code{bam()}}
+  \item{gc.level}{keepingf the memory footprint down, see  the help for \code{bam()}}
+  \item{use.chol}{see  the help for \code{bam()}}
+  \item{samfrac}{
+see  the help for \code{bam()}
+}
+  \item{coef}{initial values for model coefficients}
+  \item{\dots}{extra options to pass to gam.control()}
 }
 \details{
 Note that \code{ga} itself does no smoothing; it simply sets things up for the function \code{gamlss()} which in turn uses the function 

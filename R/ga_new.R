@@ -39,18 +39,28 @@ ga <-function(formula, control = ga.control(...), ...)
   # Initialize gam
      formula <- as.formula(paste0("Y.var", deparse(formula, width.cutoff = 500L)))
   Data$Y.var <- rep(0, nrow(Data))
-          G <- gam(formula, data=Data,
-            offset=control$offset, method=control$method, optimizer=control$optimizer, 
-            control=control$control,
-            select=control$select, knots=control$knots, sp=control$sp,
-            min.sp=control$min.sp, H=control$H, gamma=control$gamma,  
-            paraPen=control$paraPen,
-            in.out=control$in.out, 
-            drop.unused.levels=control$drop.unused.levels,
-            drop.intercept=control$drop.intercept,
-            G=NULL, fit=FALSE)
+          G <- gam(formula, 
+            data = Data,
+          offset = control$offset, 
+          method = control$method, 
+       optimizer = control$optimizer, 
+         control = control$control,
+           scale =  control$scale,
+          select = control$select, 
+           knots = control$knots, 
+              sp = control$sp,
+          min.sp = control$min.sp, 
+               H = control$H, 
+           gamma = control$gamma,  
+         paraPen = control$paraPen,
+          in.out = control$in.out, 
+drop.unused.levels = control$drop.unused.levels,
+  drop.intercept = control$drop.intercept,
+        discrete = control$discrete,
+              G = NULL, 
+            fit = FALSE)
  #-------------------------------------------------- 
-                      xvar <- rep(0,  dim(Data)[1]) 
+  xvar <- rep(0,  dim(Data)[1]) 
   attr(xvar,"formula")     <- formula
   attr(xvar,"control")     <- control
   attr(xvar, "gamlss.env") <- gamlss.env
@@ -66,6 +76,8 @@ ga <-function(formula, control = ga.control(...), ...)
 ga.control = function(offset = NULL, 
                       method = "REML", 
                    optimizer = c("outer","newton"), 
+                     control = list(),
+                       scale = 0,
                       select = FALSE, 
                        knots = NULL,
                           sp = NULL, 
@@ -75,15 +87,18 @@ ga.control = function(offset = NULL,
                      paraPen = NULL,  
                       in.out = NULL,
           drop.unused.levels = TRUE,
-              drop.intercept = NULL,...)
+              drop.intercept = NULL,
+                    discrete = FALSE,
+          ...)
 {
   #gam()
   control <- gam.control(...)
   #ga()
   list(offset=offset, method=method, optimizer=optimizer, control=control, 
+       scale= scale, 
        select=select, knots=knots, sp=sp, min.sp=min.sp, H=H, gamma=gamma, 
        paraPen=paraPen, in.out=in.out,   drop.unused.levels = drop.unused.levels,
-       drop.intercept=drop.intercept, ...)
+       drop.intercept=drop.intercept, discrete = discrete, ...)
 }
 #--------------------------------------------------------------------------------------
 gamlss.ga <-function(x, y, w, xeval = NULL, ...) {

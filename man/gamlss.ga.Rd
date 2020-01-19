@@ -12,7 +12,6 @@ It is not intended to be called directly by users.
 \usage{
 gamlss.ga(x, y, w, xeval = NULL, ...)
 
-gamlss.ba(x, y, w, xeval = NULL, ...)
 }
 
 \arguments{

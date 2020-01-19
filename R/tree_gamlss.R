@@ -74,13 +74,13 @@ gamlss.tr <-function(x, y, w, xeval = NULL, ...)
         frame <- fit$frame
        leaves <- frame$var == "<leaf>"
          size <- sum(leaves)
-           df <-  size #frame$n[1] - size
+           df <-  2*size-1 #the number of leafs + no of break points
     residuals <- resid(fit)
            fv <- predict(fit)  # this can be a matrix ??
   if (is.null(xeval))
     {
    list(fitted.values=fv, residuals=residuals,
-     nl.df = df, lambda=NA, ## we nead df's here 
+     nl.df = df-1, lambda=NA, ## we need df's here 
      coefSmo = fit, var=NA)    # var=fv has to fixed
     }
 else 
