@@ -40,9 +40,7 @@ Note that trying to predict outside the x-range can be dangerous as the example 
 The \code{gamlss} object saved contains the last fitted object which can be accessed using 
 \code{obj$par.coefSmo} where \code{obj} is the fitted \code{gamlss} object \code{par} is the relevant distribution
  parameter.}
-   
 \references{
-
 Dierckx, P. (1991) \emph{Curve and Surface Fitting with Splines}, Oxford Science Publications
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.

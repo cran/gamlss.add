@@ -47,19 +47,21 @@ Note that \code{nn} itself does no smoothing; it simply sets things up for the f
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Ripley, B. D. (1996) Pattern Recognition and Neural Networks. Cambridge. 
+Rigby R.A., Stasinopoulos D. M., Heller G., and De Bastiani F., (2019) \emph{Distributions for Modeling Location, Scale and Shape: Using GAMLSS in R}, Chapman and Hall/CRC.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Ripley, B. D. (1996) \emph{Pattern Recognition and Neural Networks}. Cambridge. 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
 
-Venables, W. N. and Ripley, B. D. (2002) Modern Applied Statistics with S. Fourth edition. Springer. 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017) \emph{Flexible Regression and Smoothing: Using GAMLSS in R}, Chapman and Hall/CRC. 
+(see also \url{http://www.gamlss.com/}).
+
+Venables, W. N. and Ripley, B. D. (2002) \emph{Modern Applied Statistics with S}. Fourth edition. Springer. 
 
 }
 \author{
-Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby 
+Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby 
 based on work of  Venables & Ripley wich also based on work by Kurt Hornik and Albrecht Gebhardt.
 }
 
@@ -94,7 +96,7 @@ wf2<-wireframe(fit~area+peri, rocknew1, screen=list(z=160, x=-60),
                aspect=c(1, 0.5), drape=TRUE,  main="nn()")
 print(wf1, split=c(1,1,2,1), more=TRUE)
 print(wf2, split=c(2,1,2,1))
-#--------------------------------------------------------------------------------------- 
+#------------------------------------------------------------------------
  data(rent)
  mr1 <- gamlss(R~nn(~Fl+A, size=5, decay=0.001), data=rent, family=GA)  
  library(gamlss.add)
@@ -111,17 +113,15 @@ newrent2$fit <- predict(mg1, newdata=newrent, type="response")# gam
                 colorkey=(list(space="right", height=0.6)), main="ga()")
 print(wf1, split=c(1,1,2,1), more=TRUE)
 print(wf2, split=c(2,1,2,1))
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 \dontrun{
 data(db)
 mdb1 <- gamlss(head~nn(~age,size=20, decay=0.001), data=db)
 plot(head~age, data=db)
 points(fitted(mdb1)~db$age, col="red")
-
-# do not run
-#mdb2 <- gamlss(head~nn(~age,size=20, decay=0.001), data=db, family=BCT)
-#plot(head~age, data=db)
-#points(fitted(mdb2)~db$age, col="red")
+mdb2 <- gamlss(head~nn(~age,size=20, decay=0.001), data=db, family=BCT)
+plot(head~age, data=db)
+points(fitted(mdb2)~db$age, col="red")
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
