@@ -4,12 +4,12 @@ export(
        ba, ga.control, gamlss.ba,
        nn, nn.control, gamlss.nn,
        #la, la.control, gamlss.la,
-      # penLags, 
+       # penLags, 
        fk, gamlss.fk,
        #blag, llag, wlag,
        fitFixedKnots, fitFreeKnots,
        tr, gamlss.tr,
-      centilesTwo)
+       centilesTwo)
 
 importFrom(splines, splineDesign)
 importFrom(mgcv, exclude.too.far)

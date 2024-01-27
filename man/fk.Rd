@@ -7,8 +7,7 @@
 
 \description{
 The \code{fk()} function is a additive function to be used for GAMLSS models. 
-It is an interface for the \code{fitFreeKnots()} function of package 
-\pkg{gamlss.util}. The functions \code{fitFreeKnots()} was first based on the  \code{curfit.free.knot()} function of package DierckxSpline of  Sundar Dorai-Raj and Spencer Graves. The function \code{fk()} allows the user to use the free knots function \code{fitFreeKnots()} within \code{gamlss}. 
+It is an interface for the \code{fitFreeKnots()} function. The functions \code{fitFreeKnots()} was first based on the  \code{curfit.free.knot()} function of package DierckxSpline of  Sundar Dorai-Raj and Spencer Graves. The function \code{fk()} allows the user to use the free knots function \code{fitFreeKnots()} within \code{gamlss}. 
 The great advantage of course comes from the fact GAMLSS models provide a variety of distributions and diagnostics.
 }
 \usage{
@@ -44,13 +43,13 @@ The \code{gamlss} object saved contains the last fitted object which can be acce
 Dierckx, P. (1991) \emph{Curve and Surface Fitting with Splines}, Oxford Science Publications
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{https://www.gamlss.com/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{https://www.jstatsoft.org/article/view/v023i07}.
 }
 \author{
-Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby 
+Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby 
 }
 
 \seealso{

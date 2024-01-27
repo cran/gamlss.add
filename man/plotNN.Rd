@@ -17,7 +17,7 @@ pos.col = "black", neg.col = "grey", max.sp = FALSE, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{A neural network fitted model }
-  \item{nid}{logical value indicating if neural interpretation diagram is plotted, default is  code{TRUE}}
+  \item{nid}{logical value indicating if neural interpretation diagram is plotted, default is  \code{TRUE}}
 \item{all.out}{character string indicating names of response variables for which connections are plotted, default all}
  \item{all.in}{character string indicating names of input variables for which connections are plotted, default all}
   \item{bias}{logical value indicating if bias nodes and connections are plotted, not applicable for networks from mlp function, default \code{TRUE}}
