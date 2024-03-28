@@ -46,7 +46,7 @@ Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how 
 Accompanying documentation in the current GAMLSS  help files, (see also  \url{https://www.gamlss.com/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{https://www.jstatsoft.org/article/view/v023i07}.
+\emph{Journal of Statistical Software}, \bold{23}(7), 1--46, \doi{10.18637/jss.v023.i07}
 }
 \author{
 Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby 

@@ -41,7 +41,7 @@ Ripley, B. D. (1996) \emph{Pattern Recognition and Neural Networks}. Cambridge.
 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{https://www.jstatsoft.org/article/view/v023i07}.
+\emph{Journal of Statistical Software}, \bold{23}(7), 1--46, \doi{10.18637/jss.v023.i07}
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017) \emph{Flexible Regression and Smoothing: Using GAMLSS in R}, Chapman and Hall/CRC. 
 
@@ -50,9 +50,6 @@ Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2
 Therneau T. M., Atkinson E. J. (2015) An Introduction to Recursive Partitioning Using the RPART Routines. Vignette in package rpart.
 
 Venables, W. N. and Ripley, B. D. (2002) \emph{Modern Applied Statistics with S}. Fourth edition. Springer. 
-
-
-
 }
 \author{
 Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby  based on work of Therneau and Atkison (2015)
