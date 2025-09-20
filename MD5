@@ -1,4 +1,4 @@
-0fb71124acf8880fcee59713887b0a3e *DESCRIPTION
+97a8fd067aa1342484a3d1b1f4a1dfc2 *DESCRIPTION
 71b118ae57961a1a5590fd623f45e053 *NAMESPACE
 633ca421a30cb9f0fed197fbc3d98dc2 *NEWS.md
 f0a458b13e5d604d53129c8fb8cb025d *R/CentilesTwo.R
@@ -10,8 +10,8 @@ cd14499b9bf7d49821bbd321a85e8d31 *R/nnet_gamlss.R
 991a4fb8daf0c63ed7ba55051b82d200 *R/plotNN.R
 2f50ac0ae48165c3133552bc372b440b *R/tree_gamlss.R
 dc7aa21788cc8451560a9e6480c1aee6 *README.md
-480195e8718b8bd618f3925ca6a43aa9 *build/partial.rdb
-1fa6f9275e92b846e6ef609330afd39e *man/centilesTwo.Rd
+dc3fd8cbdc5254102c139dbd33ae2616 *build/partial.rdb
+87e90fa444e7177fadf6af45b76f2839 *man/centilesTwo.Rd
 e581094c96d7d551d0409ee0e314bc7f *man/fitFixedKnots.Rd
 3dcd99631a5dc99af88a27077a20da86 *man/fk.Rd
 3a677ac24b2cacd5c23aff3c8fcd767c *man/ga.Rd

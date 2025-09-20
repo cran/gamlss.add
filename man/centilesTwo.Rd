@@ -54,7 +54,7 @@ Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby, Fernanda
 }
 
 \seealso{
-\code{\link{centiles}}
+\code{\link[gamlss]{centiles}}
 }
 \examples{
 \dontrun{ 
